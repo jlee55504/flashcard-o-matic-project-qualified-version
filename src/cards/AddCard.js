@@ -103,10 +103,10 @@ function AddCard() {
         <h2 className='AddCard-deck-name-h2'> {deckName}: </h2><h2 className='AddCard-add-card-h2'> Add Card</h2>
                 <form onSubmit={handleSubmit}>
                     <label htmlFor='AddCard-front-card'>
-                        Front<textarea id="AddCard-front-card" name="AddCard-front-card" placeholder='Front side of card' onChange={handleChange}  defaultValue={frontCardText} required ></textarea>
+                        Front<textarea id="AddCard-front-card" name="AddCard-front-card" placeholder='Front side of card' onChange={handleChange}  value={frontCardText} required ></textarea>
                     </label>
                     <label htmlFor='AddCard-back-card'>
-                    Back<textarea id="AddCard-back-card" name="AddCard-back-card" placeholder='Back side of card' onChange={handleChange} defaultValue={backCardText} required ></textarea>
+                    Back<textarea id="AddCard-back-card" name="AddCard-back-card" placeholder='Back side of card' onChange={handleChange} value={backCardText} required ></textarea>
                     </label>
                 <button type="button" className='AddCard-done-btn btn btn-secondary' onClick={() => navigate(`/decks/${deckId}`)} >Done</button>
                 <button  type='submit' className='AddCard-save-btn btn btn-primary' >Save</button>
