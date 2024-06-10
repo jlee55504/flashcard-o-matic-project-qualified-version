@@ -32,19 +32,17 @@ function EditDeck() {
     const navigate = useNavigate();
     /* The "abortController" 'variable' holds a 'new' 'AbortController' 'method'. */
     const abortController = new AbortController();
-    /* This 'useEffect' 'component' 'reads' the selected "deck" by using a 
-'useEffect' 'component' and the "readDeck" 'function/component' with 'await' 
-inside the 'async function' "getDeck" with the "deckId" and 
-"abortController.signal" as its arugments (stored inside the "currentDeck" 
-'variable') to 'set' the "deck" 'variable' using the "setDeck" 'function' every 
-time the "deck" 'variable' changes. */
+ 
     useEffect(() => { 
         async function getDeck() {
             const currentDeck = await readDeck(deckId, abortController.signal);
             setDeck(currentDeck);
+            setDeckName(currentDeck.name);
+            setDeckDescription(currentDeck.description);
         }
         getDeck();
-    }, [deck]);
+    }, [updateDeck]);
+
     /* When the "waitForDeckToUpdate" 'variable' changes, a 'useEffect' 
     'component' runs checking if the "deck" 'variable' if 'falsey'. If so, 
     'return' is returned. If "waitForDeckToUpdate" is 'true'and the "deck" 
@@ -84,8 +82,8 @@ time the "deck" 'variable' changes. */
         description: deckDescription
         });
         setWaitForDeckToUpdate(true);  
-        setDeckName("");
-        setDeckDescription("");         
+       // setDeckName("");
+       // setDeckDescription("");         
     }
     /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
     contains a 'Link' JSX 'component' (which brings users to the "Home page") with
@@ -104,15 +102,15 @@ time the "deck" 'variable' changes. */
                 Home</Link> / <Link to={`/decks/${deckId}`}>{deck.name}</Link> / Edit Deck</div>
             <h1>Edit Deck</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlfor="EditDeck-deck-name" >Name
+                <label htmlFor="EditDeck-deck-name" >Name
                     <input type="text" id="EditDeck-deck-name" name="EditDeck-deck-name" 
                     placeholder={deck.name} 
-                    onChange={handleChange} required defaultValue={deck.name} ></input>
+                    onChange={handleChange} required value={deckName} ></input>
                 </label>
-                <label htmlfor="EditDeck-deck-description" >Description
+                <label htmlFor="EditDeck-deck-description" >Description
                     <textarea id="EditDeck-deck-description" name="EditDeck-deck-description"
                     placeholder={deck.description} 
-                    onChange={handleChange} required defaultValue={deck.description} ></textarea>
+                    onChange={handleChange} required value={deckDescription} ></textarea>
                  <button type="button" 
                     className="EditDeck-cancel-btn btn btn-secondary" onClick={()=> navigate(`/decks/${deckId}`)} >
                         Cancel
