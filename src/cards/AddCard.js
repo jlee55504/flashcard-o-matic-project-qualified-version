@@ -95,7 +95,7 @@ function AddCard() {
      "Deck.js" which displays the proper info fo the specifified "deck" 'file' and
       a 'form' to 'add' a new "card" 'object' to the specified "deck" and 
       'local server'.  */
-      
+
     return (
         <div>
             <div className='nav-bar'><Link to="/" className='home-link' >
@@ -106,7 +106,7 @@ function AddCard() {
                         Front<textarea id="AddCard-front-card" name="AddCard-front-card" placeholder='Front side of card' onChange={handleChange}  defaultValue={frontCardText} required ></textarea>
                     </label>
                     <label htmlFor='AddCard-back-card'>
-                    Back<textarea id="AddCard-back-card" name="AddCard-back-card" placeholder='Back side of card' onChange={handleChange} defaultValue={backCardText}  required ></textarea>
+                    Back<textarea id="AddCard-back-card" name="AddCard-back-card" placeholder='Back side of card' onChange={handleChange} defaultValue={backCardText} required ></textarea>
                     </label>
                 <button type="button" className='AddCard-done-btn btn btn-secondary' onClick={() => navigate(`/decks/${deckId}`)} >Done</button>
                 <button  type='submit' className='AddCard-save-btn btn btn-primary' >Save</button>
