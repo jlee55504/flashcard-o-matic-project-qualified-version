@@ -88,7 +88,7 @@ If yes, then the 'async' 'function' "deleteAndUpdateDecks" is called which calls
     every "deck" on the local server via JSX 'elements'. If the 'URL' 'path' is 
      different, the "createDeckBtn" and the "CreateDeck" 'variable' will be given
       the value 'null'. */
-/*if (location.pathname === "/") {
+if (location.pathname === "/") {
   createDeckBtn = <button type="button"  className="create-deck-btn btn btn-secondary" onClick={() => navigate("/decks/new")} >
     <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>
     Create Deck</button>
@@ -115,34 +115,13 @@ If yes, then the 'async' 'function' "deleteAndUpdateDecks" is called which calls
 } else {
   createDeckBtn = null;
   decks = null;
-}*/
+}
 /* A 'div' JSX 'element' is returned with the "Header" 'component' inside. Also 
 inside is another 'div' JSX 'element' with the 'className' "container". Inside 
 are the "createDeckBtn" and "decks" 'variables' and a 'Routes' JSX 'components' 
 with the 'routes' to the "Study", "CreateDeck", "Deck", "EditDeck", "AddCard", 
-and the "EditCard" 'components' via 'Route' JSX 'elements'.
+and the "EditCard" 'components' via 'Route' JSX 'elements'.*/
 
-
-
-
-
-//Create Deck Link
-<Link to="/decks/new" className="create-deck-btn btn btn-secondary" >
-    <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>
-    CreateDeck
-  </Link>
-
-
-    //Deck Links
-    <Link className="Layout-index-view-deck-btn btn btn-secondary" to={`/decks/${deck.id}`} >
-          <img width="20" height="20" src="https://img.icons8.com/external-creatype-glyph-colourcreatype/64/000000/external-app-web-application-v1-creatype-glyph-colourcreatype-52.png" alt="external-app-web-application-v1-creatype-glyph-colourcreatype-52" className="eye-img" />
-          View
-          </Link>
-              <Link className="Layout-index-study-deck-btn btn btn-primary" to={`/decks/${deck.id}/study`} >
-                <img width="18" height="18" src="https://img.icons8.com/material-rounded/24/000000/bookmark.png" className="book-img" alt="bookmark"/>
-                Study
-              </Link>
-*/
   return (
     <div>
       <Header />
@@ -153,29 +132,8 @@ and the "EditCard" 'components' via 'Route' JSX 'elements'.
     <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>
     Create Deck</button>
  : <></>}
-
-{location.pathname === "/" ? 
-    decksList.map((deck, index) => (
-    <div className="Layout-index-deck-div" key={index} >
-      <div className="Layout-index-header-card-count-div">
-        <h2 className="Layout-index-deck-title">{deck.name}</h2>
-        <h5 className="Layout-index-card-count-div">{deck.cards.length} cards</h5>
-      </div>
-      <p className="Layout-index-deck-description">{deck.description}</p>
-    <div className="Layout-index-btns-div">
-    <button type="button" className="Layout-index-view-deck-btn btn btn-secondary" onClick={() => navigate(`/decks/${deck.id}/*`)} >
-        <img width="20" height="20" src="https://img.icons8.com/external-creatype-glyph-colourcreatype/64/000000/external-app-web-application-v1-creatype-glyph-colourcreatype-52.png" alt="external-app-web-application-v1-creatype-glyph-colourcreatype-52" className="eye-img" />
-          View</button> 
-        <button type="button" className="Layout-index-study-deck-btn btn btn-primary" onClick={() => navigate(`/decks/${deck.id}/study`)} >
-            <img width="18" height="18" src="https://img.icons8.com/material-rounded/24/000000/bookmark.png" className="book-img" alt="bookmark"/>
-              Study</button>
-          <button type="button" className="Layout-index-delete-deck-btn btn btn-danger" value={index} onClick={ () => handleDeleteDeck(deck.id)} >
-            <img width="18" height="18" src="https://img.icons8.com/material-rounded/24/000000/trash.png" className="trashcan-img" alt="trash"/>
-          </button>     
-  </div>
-</div>
-)) : <></>}
-
+    {createDeckBtn}
+    {decks}
           <Routes>
             <Route path="/" element={Layout} />
             <Route path="/decks/new" element={<CreateDeck />} />

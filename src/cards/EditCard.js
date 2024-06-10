@@ -191,12 +191,12 @@ function EditCard() {
                     Front
                     <textarea id="EditCard-front-text" name="EditCard-front-text"
                      placeholder={card.front}
-                      onChange={handleChange} required  defaultValue={card.front} ></textarea>
+                      onChange={handleChange} defaultValue={card.front} required ></textarea>
                 </label>
                 <label htmlfor="EditCard-back-text" >Back
                     <textarea id="EditCard-back-text" name="EditCard-back-text" 
-                     placeholder={card.back} required 
-                     onChange={handleChange} defaultValue={card.back}  />
+                     placeholder={card.back} 
+                     onChange={handleChange} defaultValue={card.back} required  />
                 </label>
                 <button type="button" className="EditCard-cancel-btn btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
                 <button type="submit" className="EditCard-submit-btn btn btn-primary" >Submit</button>
