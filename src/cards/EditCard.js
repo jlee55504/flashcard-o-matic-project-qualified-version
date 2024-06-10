@@ -195,12 +195,12 @@ function EditCard() {
                 <label htmlFor="EditCard-front-text" className='EditCard-front-text-label' >
                     Front
                     <textarea id="EditCard-front-text" name="EditCard-front-text"
-                     placeholder={frontCardText}
+                     placeholder={card.front}
                       onChange={handleChange} value={frontCardText} required ></textarea>
                 </label>
                 <label htmlFor="EditCard-back-text" >Back
                     <textarea id="EditCard-back-text" name="EditCard-back-text" 
-                     placeholder={backCardText} 
+                     placeholder={card.front} 
                      onChange={handleChange}  value={backCardText} required  />
                 </label>
                 <button type="button" className="EditCard-cancel-btn btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
