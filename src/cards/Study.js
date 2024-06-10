@@ -2,208 +2,320 @@
 import React, { useState, useEffect } from 'react';
 /* Imports the 'useParams', 'Link', and the 'useNavigate' 'components' from 
 'react-router-dom'. */
-import { useParams, useNavigate, Link } from 'react-router-dom';
-/* Imports the "readDeck", "updateCard", and the "readCard" 'functions/components'
- from '../utils/api/index.js'. */
-import { readDeck, updateCard, readCard } from '../utils/api/index';
+import { useParams, Link, useNavigate  } from 'react-router-dom';
 /* Imports the "classNames" from '../utils/class-names/index.js'. */
 import { classNames } from '../utils/class-names/index';
+/* Imports the "readDeck" 'function/component' from '../utils/api/index.js'. */
+import { readDeck } from '../utils/api/index';
 
-/* The "EditCard" 'function/component' displays the "nav-bar" 'div'. which 
-(contains a 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" 
-(which displays the specified "decks" info) and a 'form' which allows users to 
-'edit' and update the 'text' of the specified "card" in the specified "deck". */
-function EditCard() {
-  /* The "deckId" and the "cardId" 'variables' are extracted using the 'useParams'
-   'component'. */
-  const { deckId, cardId } = useParams();
-  /* The "frontCardText" 'variable' and the "setFrontCardText" 'function' are 
-  'declared' using the 'useState' (which is set to an empty 'string' ("")). */
-  const [frontCardText, setFrontCardText] = useState("");
-  /* The "backCardText" 'variable' and the "setBackCardText" 'function' are 
-  'declared' using the 'useState' (which is set to an empty 'string' ("")). */
-  const [backCardText, setBackCardText] = useState("");
-  /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
-  const navigate = useNavigate();
-  /*The "deck" 'variable' and the "setDeck" 'function' are declared 
-    using the 'useState' 'component' with an empty 'object' ('{}') as its argument.  */
-  const [deck, setDeck] = useState({});
-  /* The "deckName" 'variable' and the "setDeckName" 'function' are 'declared' 
-  using the 'useState' 'component' with an empty 'string' ("") as its argument. */
-  const [deckName, setDeckName] = useState("");
-  /* The "card" 'variable' and the "setCard" 'function' are 'declared' using the 
-  'useState' (which is set to an empty 'string' ("")). */
-  const [card, setCard] = useState({});
-  /* The "waitForCardToUpdate" 'variable' and the "setWaitForCardToUpdate" 
-  'function' are 'declared' using the 'useState' (which is set to 'false'). */
-  const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false); 
-  /* The "abortcontroller" holds a 'new AbortController' 'method'. */
-  const abortController = new AbortController();
+/* The "Study" 'function/component' displays the "nav-bar" 'div' which (contains
+ a 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" (which 
+  displays the specified "decks" info) and the data of the "front" and "back" 
+  'keys' of the specified "deck" 'object', with the ability to 'redisplay' the 
+  "cards" after all the "cards" have been displayed or to go back to the "Home 
+  page" ('src/Layout/index.js'). */
+function Study() {
+    /* The "deckId" 'variable' is extracted using the 'useParams' 'component'. */
+    const { deckId } = useParams();
+    /* The "deckName" 'variable' and the "setDeckName" 'function' are 'declared' 
+    using the 'useState' (which is set to an empty 'string' ("")). */
+    const [deckName, setDeckName] = useState("");
+    /* The "deckCards" 'variable' and the "setDeckCards" 'function' are 'declared' 
+    using the 'useState' (which is set to an empty 'array' ("[]"). */
+    const [deckCards, setDeckCards] = useState([]);
+    /* The "currentCardNumber" 'variable' and the "setCurrentCardNumber" 
+    'function' are 'declared' using the 'useState' (which is set to the 'Number' 
+    "1"). */
+    const [currentCardNumber, setCurrentCardNumber] = useState(1);
+    /* The "currentCardIndex" 'variable' and the "setCurrentCardIndex" 
+    'function' are 'declared' using the 'useState' (which is set to the 'Number' 
+    "0"). */
+    const [currentCardIndex, setCurrentCardIndex] = useState(0);
+    /* The "currentCardText" 'variable' and the "setCurrentCardText" 'function' 
+    are 'declared' using the 'useState' (which is set to an empty 'string' ("")). */
+    const [currentCardText, setCurrentCardText] = useState("");
+    /* The "isCardFlipped" 'variable' and the "setIsCardFlipped" 
+    'function' are 'declared' using the 'useState' (which is set to 'false'). */
+    const [isCardFlipped, setIsCardFlipped] = useState(false);
+    /* The "firstFlip" 'variable' and the "setFirstFlip" 'function' are 'declared'
+     using the 'useState' (which is set to 'false'). */
+    const [firstFlip, setFirstFlip] = useState(false);
+    /* The "sameCard" 'variable' and the "setSameCard" 'function' are 'declared'
+     using the 'useState' (which is set to 'false'). */
+    const [sameCard, setSameCard] = useState(false);
+    /* The "buttonsToDisplay" 'variable' is 'declared' which will hold either a 
+     'div' that contains two 'button' JSX 'elements' or one 'button' JSX 
+     'element' depending on the 'value' of the "isCardFlipped" 'variable'. */
+    let buttonsToDisplay;
+    /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
+    const navigate = useNavigate();
+    /* This 'useEffect' 'component' runs only once when the web page first 
+    'loads'. The "abortcontroller" holds a 'new AbortController' 'method'. The 
+    'async function' "getDeck" uses the "readDeck" with 'await' with the "deckId"
+     'variable' and "abortController.signal" for 'arguments' (which is stored in 
+     the "selectedDeck" 'variable'). The "setDeckName" is 'called' with the 
+     specific "deck" from the 'local host server' (the "selectedDeck" 
+     'variable's') "name" 'key' as its 'argument'. This will hold the selected
+      "deck's" "name" in the "deckName" 'variable'. Then, the "setDeckCards" 
+      'function' is 'called' with the specific "deck" from the 'local host server'
+       (the "selectedDeck" 'variable's') "cards" 'key'. This will hold the 
+       selected "deck's" "cards" in the "deckCards" 'variable'. */
+    useEffect(() => {
+        const abortController = new AbortController();
+        async function getDeck() {
+            const selectedDeck = await readDeck(deckId, abortController.signal);
+            setDeckName(selectedDeck.name);
+            setDeckCards(selectedDeck.cards);              
+        }
+         getDeck();
+    }, []);
 
-  /* This 'useEffect' 'component' runs every time the "card" and 'variable' 
-  change using the 'async function' "getDeck" which calls the "readDeck" 
-  'function/component' using 'await' with the "deckId" 'variable'and 
-  "abortController.signal" as its arguments (which is stored in the 
-    "currentDeck" 'variable'). The "deck" 'variable' is then 'set' with 
-    data retrieved from the "selectedDeck" 'variable', the "deckName" 
-    'variable' is 'set' with the "setDeckName" 'function' using the "currentDeck"
-     'variable's' "name" 'key' 'value', the "readCard" 'function/component' is 
-     'called' with the "cardId" 'variable' and "abortController.signal" for 
-     'arguments' (which is stored in the "currentCard" 'variable') and the "card"
-      'variable' is set with the "cards" 'key' from the "currentCard" 'variable's'
-       'value' using the "setCard" 'function'. This code 'updates' the user's 
-       screen to show the 'link' to the "Deck.js" 'file' of the selected "deck".
-        The "handleChange" 'function' that takes an 'object' 'parameter' named 
-    "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
-    equal to "EditCard-front-text". If so, the "setFrontCardText" is 'called' with
-     the "target" 'parameter's' 'value' as its 'argument'. Next, the "target" 
-     'parameter's' 'name' 'attribute' is equal to "EditCard-back-text", the 
-     "setBackCardText" 'function' is 'called' with the "target" 'parameter's' 
-     'value' as its 'argument'. This code 'sets' the "frontCardText" and the 
-     "backCardText" 'variables' are 'set' with the data the user inputs. The 
-     "handleSubmit" 'function' takes a 'parameter' named "event". The 'method' 
-     'preventDefault' is 'called' with the "event" 'parameter'. Then, the
-     "setCard" 'function' is 'called' with an 'object' as its 'argument'. The 
-     'object' contains an "id" 'key' with the "card" 'variable's' "id" 'key' 
-     'value' using the 'Number' 'method', a "front" 'key' with the "frontCardText"
-      'variable' as its 'value', a "back" 'key' with the "backCardText" 'variable'
-       as the 'value', and a "deckId" 'key' with the "card" 'variable's' "deckId" 
-       'key' using the 'Number' 'method' as its 'value'. The 
-       "setWaitForCardToUpdate" 'function' is 'called' with 'true' as its 
-       'argument'. This code prevents the web page from 'reloading' after the 
-       'form' is 'submitted', the "card" 'variable' is 'updated' to holds the info
-        that the user 'inputs' and the "setWaitForCardToUpdate" is 'called' 
-        which triggers the 'useEffect' the 'updates' the specific "card" on the 
-         'local server'. */  
-  useEffect(() => {
-    async function getDeck() {
-        const currentDeck = await readDeck(deckId, abortController.signal);
-        setDeck(currentDeck);
-        setDeckName(currentDeck.name)
-        const currentCard = await readCard(cardId, abortController.signal);
-        setCard(currentCard);
-        } getDeck();
-    }, [card]);
+    /* This 'useEffect' 'component' runs when the "deckCards" 'variable' or the 
+    "currentCardIndex" 'variable' changes. An 'if statement' first checks if the 
+    "deckCards" 'length' is equal to the number '0' (check if there are any 
+    "cards/items"). If not, 'return' is 'returned' and the code ends. If the 
+    "deckCards" 'length' is greater than the number '1' (there are "cards/items")
+    and the "currentCardIndex" 'variable's' 'value' is equal to the number '0', 
+    the "setCurrentCardText" 'function' is 'called' with the first "card/item" in
+     the "deckCard" 'variable's' "front" 'key' 'value'. This 'useEffect' 
+     'component' is used to display the first "card's" "front" 'text'. */
+    useEffect(() => {
+        if (deckCards.length === 0) return;
+       else if(deckCards.length > 0 && currentCardIndex === 0) {
+            setCurrentCardText(deckCards[0].front);
+        }
+        
+    }, [deckCards, currentCardIndex]);
 
-    /* This 'useEffect' 'component' runs every time the "waitForCardToUpdate" 
-    'variable' changes. An 'if statement' checks if the "card" 'variable' is equal
-     to an empty 'object' and the "waitForCardToUpdate" 'variable' is 'true'. If 
-     so, the "updateCard" 'function/component' is 'called' with the "card" 
-     'variable' and "abortController.signal" as 'arguments', the 
-     "setWaitForCardToUpdate" 'function' is 'called' with 'false' as its 'value', 
-     the "setFrontCardText" and "setBackCardText" 'functions' are 'called' with 
-     empty strings ("") as 'arguments'. The "navigate" 'valiable' is then 'called'
-      with the  'text' "/decks/" plus the "deckId" 'variable'. Otherwise, 'return'
-       is 'returned'. This code updates the 'local server', 'resets' the 
-       "frontCardText" and "backCardText" 'variable's' 'values', and takes users 
-       back to the "Deck.js" 'file' web page that displays the specified "deck's" 
-       info. A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside 
-       which contains a 'Link' JSX 'component' (which brings users to the "Home 
-       page") with an 'img' JSX 'element' inside with the 'text' "Home" followed 
-       by the text " / ", a 'Link' JSX 'element' to the  the 'link' to the 
-       "Deck.js" 'file' that displays the current "deck", and the 'text' " / Edit 
-       Card ", plus the "card" 'variable's' "id" 'key' 'value', an 'h1' JSX 
-       'element' with the 'text' "Edit Card". A 'form' JSX 'element' with the 
-       "handlesubmit" 'function' as the 'value' for its 'onSubmit' 'value'. Inside
-        are two 'label' JSX 'elements'; the first one has the 'text' "Front" while
-         the other has the 'text' "Back". Both 'label' JSX 'elements' hold 
-         'textarea' JSX 'elements' with the "handleChange" 'function' as the 
-         'value' for its 'onChange' 'function' for the 'value' of its 'onChange' 
-         'attributes'. Two 'button' JSX 'elements' follow; the first has the 
-         'text' "Cancel" and the "navigate" 'variable' with "/decks/" plus the 
-         "deckId" 'variable' as its 'argument. The second 'button' JSX 'element'
-          has the 'text' "Submit". This code holds the 'links' to the "Home page" 
-          and "Deck.js" 'files' and a 'form' to 'update' the selected "card". */
-    useEffect(() => {   
-        if (card != {} && waitForCardToUpdate) {
-            updateCard(card, abortController.signal);
-            setWaitForCardToUpdate(false);
-            setFrontCardText("");
-            setBackCardText("");
-            navigate(`/decks/${deckId}`);
-        } else return;
-    }, [waitForCardToUpdate])
+    /* The "handleCardFlip" 'function' takes a 'default parameter' named 
+    "dontFliCard" which is set to 'false'. If the "currentCardIndex" 'variable's'
+    'value' minus the number '1' is equal to the "deckCards" 'variable's' 'length'
+     minus the number '1' and the "dontFlipCard's" 'value' is equal to 'false', 
+     a 'window.confirm' screen displays (which is stored in the "confirm" 
+     'variable') asking if the user wants to 'restart' the "cards" (repeat 
+    displaying the 'cards/items' in the "deckCards" 'variable'). If so, the 
+    "currentCardIndex" 'variable's' 'value' is 'set' to the number '0' with the 
+    "setCurrentCardIndex" 'function', the "currentCardNumber" 'variable' is 'set'
+     to the number '1', and the "isCardFlipped" 'variable's' 'value' is 'set' to 
+     'false' with the "setIsCardFlipped". If the "confirm" 'variable's' 'value' is
+      equal to 'false', the "navigate" 'variable' is 'called' with the 'text' "/"
+       (this takes users back to the "Home page"). If the "isCardFlipped" 
+       'variable's' 'value' is equal to 'false' and the "dontFlipCard" 
+       'parameter's' 'value' is equal to 'false' or the "isCardFlipped" 
+       'variable's' 'value' is equal to 'true' and the "dontFlipCard" 'variable's' 
+        'value' is equal to 'true', the "setIsCardFlipped" 'function' is 'called'
+         with 'true' as its 'argument' and "setSameCard" 'function' is 'called' 
+         with "true" as its 'argument'. This means that the "card" has been 
+         'flipped' and it's currently the same "card" being displayed. If the 
+         "dontFlipCard" 'parameter's' 'value' is equal to 'false', the 
+         "setCurrentCardText" 'function' is 'called' with the 'card/item' with the
+          same 'number/index' as the "currentCardIndex" 'variable's' "back" 'key' 
+          'value' as its 'argument' and the "setIsCardFlipped" 'function' is 
+          'called' with the number '1' being added to the "currentCardIndex" 
+          'variable's' current 'value'. This 'flips' the "card", displaying the 
+          "back" 'key' 'value' and gets the next "card" in the "deck" to be 
+          displayed. If the "dontFlipCard" 'parameter's' 'value' is equal to 
+          'true', the "setCurrentCardText" 'function' is 'called' with the 
+          'card/item' with the same 'number/index' as the "currentCardIndex" 
+          'variable's' "front" 'key' 'value' minus the number '1' as its 
+          'argument' and the "setIsCardFlipped" 'function' is 'called' with 
+          'false' as its 'argument'. This code runs if the "card" being displayed
+           has already been 'flipped' and the user hasn't moved on to the next 
+           "card" in the "deck". If the "isCardFlipped" 'parameter's' 'value' is
+            equal to 'true', the "setCurrentCardText" 'function' is 'called' with
+             the 'card/item' with the same 'number/index' as the 
+             "currentCardIndex" 'variable's' "currentCardIndex" 'variable's' 
+             "front" 'key' 'value' minus the number '1' as its 'argument' and the
+              "setIsCardFlipped" 'function' is 'called' with 'false' as its 
+              argument. This code is run when the "card" being displayed has been
+               'flipped', but is still the same "card" that needs the "front side"
+                to be displayed. If the  "isCardFlipped" 'parameter's' 'value' is
+                 'true' and the "dontFlipCard" 'variable' is 'false', the 
+                 "setCurrentCardText" 'function' is 'called' with the 'card/item' 
+                 with the same 'number/index' as the "currentCardIndex" 
+                 'variable's' "front" 'key' 'value' as its 'argument' and the 
+                 "setIsCardFlipped" 'function' is 'called' with 'false' as its 
+                 'argument'. This code runs if the "card" being displayed has been
+                 "flipped", but the next "card's" "front side" needs to be 
+                 displayed. If the "isCardFlipped" 'variable' is 'false' and the 
+                 "dontFlipCard" 'parameter's' 'value' is equal to 'true', the 
+                 "setCurrentCardText" 'function' is 'called' with the 'card/item'
+                  with the same 'number/index' as the "currentCardIndex" 
+                  'variable's' "back" 'key' 'value' minus the number '1' as its 
+                  'argument' and the "setIsCardFlipped" 'function' is 'called' 
+                  with 'true' as its 'argument'. This code runs when the "card" 
+                  has been "flipped", but the same "card's" "back side" still 
+                  needs to be displayed. */
+    const handleCardFlip = (dontFlipCard = false) => {
+       if (currentCardIndex -1 === deckCards.length -1 && dontFlipCard === false) {
+        const confirm = window.confirm("Restart cards? \n Click 'cancel' to return to the home page.");
+       if (confirm == true) {   
+         setCurrentCardIndex((currentIndex) => currentIndex = 0);
+         setCurrentCardNumber((currentCardNumber) => currentCardNumber = 1);
+         setIsCardFlipped(false);
+         return;
+        }    
+        else if (confirm == false) navigate("/");
+     } 
 
-    /* The "handleChange" 'function' that takes an 'object' 'parameter' named 
-    "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
-    equal to "EditCard-front-text". If so, the "setFrontCardText" is 'called' with
-     the "target" 'parameter's' 'value' as its 'argument'. Next, the "target" 
-     'parameter's' 'name' 'attribute' is equal to "EditCard-back-text", the 
-     "setBackCardText" 'function' is 'called' with the "target" 'parameter's' 
-     'value' as its 'argument'. This code 'sets' the "frontCardText" and the 
-     "backCardText" 'variables' are 'set' with the data the user inputs. */
-    const handleChange = ({ target }) => {
-        if (target.name === "EditCard-front-text") setFrontCardText(target.value);
-        else if (target.name === "EditCard-back-text") setBackCardText(target.value);
+    /* If the "isCardFlipped" 
+       'variable's' 'value' is equal to 'false' and the "dontFlipCard" 
+       'parameter's' 'value' is equal to 'false' or the "isCardFlipped" 
+       'variable's' 'value' is equal to 'true' and the "dontFlipCard" 'variable's' 
+        'value' is equal to 'true', the "setIsCardFlipped" 'function' is 'called'
+         with 'true' as its 'argument' and "setSameCard" 'function' is 'called' 
+         with "true" as its 'argument'. This means that the "card" has been 
+         'flipped' and it's currently the same "card" being displayed. If the 
+         "dontFlipCard" 'parameter's' 'value' is equal to 'false', the 
+         "setCurrentCardText" 'function' is 'called' with the 'card/item' with the
+          same 'number/index' as the "currentCardIndex" 'variable's' "back" 'key' 
+          'value' as its 'argument' and the "setIsCardFlipped" 'function' is 
+          'called' with the number '1' being added to the "currentCardIndex" 
+          'variable's' current 'value'. This 'flips' the "card", displaying the 
+          "back" 'key' 'value' and gets the next "card" in the "deck" to be 
+          displayed. If the "dontFlipCard" 'parameter's' 'value' is equal to 
+          'true', the "setCurrentCardText" 'function' is 'called' with the 
+          'card/item' with the same 'number/index' as the "currentCardIndex" 
+          'variable's' "front" 'key' 'value' minus the number '1' as its 
+          'argument' and the "setIsCardFlipped" 'function' is 'called' with 
+          'false' as its 'argument'. This code runs if the "card" being displayed
+           has already been 'flipped' and the user hasn't moved on to the next 
+           "card" in the "deck". If the "isCardFlipped" 'parameter's' 'value' is
+            equal to 'true', the "setCurrentCardText" 'function' is 'called' with
+             the 'card/item' with the same 'number/index' as the 
+             "currentCardIndex" 'variable's' "currentCardIndex" 'variable's' 
+             "front" 'key' 'value' minus the number '1' as its 'argument' and the
+              "setIsCardFlipped" 'function' is 'called' with 'false' as its 
+              argument. This code is run when the "card" being displayed has been
+               'flipped', but is still the same "card" that needs the "front side"
+                to be displayed. If the  "isCardFlipped" 'parameter's' 'value' is
+                 'true' and the "dontFlipCard" 'variable' is 'false', the 
+                 "setCurrentCardText" 'function' is 'called' with the 'card/item' 
+                 with the same 'number/index' as the "currentCardIndex" 
+                 'variable's' "front" 'key' 'value' as its 'argument' and the 
+                 "setIsCardFlipped" 'function' is 'called' with 'false' as its 
+                 'argument'. This code runs if the "card" being displayed has been
+                 "flipped", but the next "card's" "front side" needs to be 
+                 displayed. If the "isCardFlipped" 'variable' is 'false' and the 
+                 "dontFlipCard" 'parameter's' 'value' is equal to 'true', the 
+                 "setCurrentCardText" 'function' is 'called' with the 'card/item'
+                  with the same 'number/index' as the "currentCardIndex" 
+                  'variable's' "back" 'key' 'value' minus the number '1' as its 
+                  'argument' and the "setIsCardFlipped" 'function' is 'called' 
+                  with 'true' as its 'argument'. This code runs when the "card" 
+                  has been "flipped", but the same "card's" "back side" still 
+                  needs to be displayed. */ 
+    if (isCardFlipped === false && dontFlipCard === false || isCardFlipped === true
+        && dontFlipCard === true) {
+        setIsCardFlipped(true);
+        setSameCard(true);
+        if (dontFlipCard === false) { 
+            setCurrentCardText(deckCards[currentCardIndex].back);
+            setCurrentCardIndex((index) => index + 1);
+        }
+        else if (dontFlipCard === true) {
+            setCurrentCardText(deckCards[currentCardIndex -1].front);
+            setIsCardFlipped(false);
+        }
+        } else if (isCardFlipped === true && dontFlipCard === false) {
+            setCurrentCardText(deckCards[currentCardIndex].front);
+            setIsCardFlipped(false);
+        } else if (isCardFlipped === false && dontFlipCard === true) {
+            setCurrentCardText(deckCards[currentCardIndex -1].back);
+            setIsCardFlipped(true);
+        }
     }
 
-    /* The "handleSubmit" 'function' takes a 'parameter' named "event". The 
-    'method' 'preventDefault' is 'called' with the "event" 'parameter'. Then, the
-     "setCard" 'function' is 'called' with an 'object' as its 'argument'. The 
-     'object' contains an'key' named "id" with the "card" 'variable's' "id" 'key' 
-     'value' using the 'Number' 'method' as its 'value', a 'key' named "front" 
-     with the "frontCardText" 'variable' as its 'value', a 'key' named "back" with
-      the "backCardText" 'variable' as its 'value', and a "deckId" 'key' with the 
-      "card" 'variable's' "deckId" 'key' using the 'Number' 'method' as its 
-      'value'. The "setWaitForCardToUpdate" 'function' is 'called' with 'true' as 
-      its 'argument'. This code prevents the web page from 'reloading' after the 
-       'form' is 'submitted', the "card" 'variable' is 'updated' to holds the info
-        that the user 'inputs' and the "setWaitForCardToUpdate" is 'called' 
-        which triggers the 'useEffect' the 'updates' the specific "card" on the 
-         'local server'. */
-    const handleSubmit = event => {
-        event.preventDefault();
-        setCard({
-            id: Number(card.id),
-            front: frontCardText,
-            back: backCardText,
-            deckId: Number(card.deckId)
-        });
-        setWaitForCardToUpdate(true);   
+    /* If the "isCardFlipped" 'variable' is 'true', the "buttonsToDisplay" 
+    'variable' will hold a 'div' JSX 'element' containing two 'button' JSX 
+    'elements'; one with the 'text' "Flip" and the other with the "text" "Next". 
+    The first 'button' JSX 'element' has the "handleCardFlip" 'function' with 
+    'true' as its 'argument' as the 'value' for its 'onClick' 'attribute'. The 
+    second 'button' JSX 'element' checks if the "firstFlip" 'variable' is 'false'.
+     If so, the "setFirstFlip" 'function' is 'called' with 'true' as its 
+     'argument', the "setCurrentCardNumber" 'function' is 'called' adding the 
+     number '1' to the "currentCardNumber" 'variable's' current 'value', the 
+     "setSameCard" 'function' is 'called' with 'false' as its 'argument', and the
+      "handleCardFlip" 'function' is 'called' when the user 'clicks' this 
+      'button'. */
+    if (isCardFlipped === true) {
+        buttonsToDisplay = <div>
+            <button className='Study-flip-btn btn btn-secondary' 
+        onClick={() => {
+            handleCardFlip(true)
+        }
+    }>Flip</button> <button
+         className='Study-next-btn btn btn-primary' onClick={() => {            
+            if (firstFlip === false) setFirstFlip(true);
+            setCurrentCardNumber((cardNumber) => cardNumber + 1); 
+            setSameCard(false);         
+            handleCardFlip();
+        }
+    }>Next</button></div>
     }
+    /* If the "isCardFlipped" 'variable' is 'false', the "buttonsToDisplay" will 
+    hold a 'button' JSX 'element' with the 'text' "Flip" that has an 'onClick' 
+    'attribute' that checks if the "sameCard"'variable' is 'true'. If so, the 
+    "handleCardFlip" 'function' is 'called' with 'true' as its 'argument' followed
+     by 'return'. Otherwise, the ""handleCardFlip" 'function' is 'called' without 
+     an 'argument'. */
+    else if (isCardFlipped === false) { 
+        buttonsToDisplay = <button className='Study-flip-btn btn btn-secondary' 
+        onClick={() => {
+       if (sameCard === true) {
+        handleCardFlip(true);
+        return;
+       }
+       else handleCardFlip();
+    }
+}>Flip</button>
+}
 
     /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
     contains a 'Link' JSX 'component' (which brings users to the "Home page") with
      an 'img' JSX 'element' inside with the 'text' "Home" followed by the text 
      " / ", a 'Link' JSX 'element' to the  the 'link' to the "Deck.js" 
-    'file' that displays the current "deck", and the 'text' " / Edit Card ", plus 
-    the "card" 'variable's' "id" 'key' 'value', an 'h1' JSX 'element' with the 
-    'text' "Edit Card". A 'form' JSX 'element' follows with the "handlesubmit" 
-    'function' as the 'value' for its 'onSubmit' 'value'. Inside are two 'label' 
-    JSX 'elements' and two 'button' JSX 'elements'. The first 'label' JSX 
-    'element' has the 'text' Front" while the other has the 'text' "Back". Both 
-    'label' JSX 'elements' hold 'textarea' JSX 'elements' with the "handleChange" 
-    'function' as the 'value' for its 'onChange' 'function' for the 'value' of its
-     'onChange' 'attributes'. Two 'button' JSX 'elements' follow; the first has 
-     the 'text' "Cancel" and the "navigate" 'variable' with "/decks/" plus the 
-     "deckId" 'variable' as its 'argument. The second 'button' JSX 'element' has 
-     the 'text' "Submit". This code holds the 'links' to the "Home page" and 
-     "Deck.js" which displays the proper info fo the specifified "deck" 'file' and
-      a 'form' to 'update' the selected "card". */
+    'file' that displays the current "deck", and the 'text' " / Study", an 'h1' 
+    JSX 'element' with the 'text' "Study:" and the 'value' of the "deckName" 
+    'variable'. A 'ternary operator' checks if the "deckCards" 'length' is equal 
+    to or greater than the number '3' (there are more than three 'cards/objects').
+     If so, a 'div' JSX 'element' is 'returned' with an 'h3' JSX 'element' with 
+     the 'text' "Card " plus the 'value' of the "currentCardNumber", the 'text' 
+     " of ", and the 'value' of the "deckCard" 'variable's' 'length' (the total 
+        number of "cards/objects"), followed py a 'p' JSX 'element' with the 
+        'value' of the "currentCardText" 'variable' followed by the 'value' of the
+         "buttonsToDisplay" 'variable'. Otherwise, a 'div' JSX 'element' is 
+         'returned' with an 'h2' JSX 'element' with the 'text' "Not enough cards."
+          followed by a 'p' JSX 'element' with the 'text' "You need at least 3 
+          cards to study. There are ", plus the "deckCards" 'variable's' 'length' 
+          plus the 'text' " in this deck.", followed by a 'button' JSX 'element' 
+          with an 'img' JSX 'element' inside and an 'onClick' 'attribute' with the 
+          the "navigate" 'variable' with 'text' "/decks", plus the 'value' of the 
+          "deckId" 'variable', plus "/cards/new". This will take users load the 
+          "AddCards.js" 'file' for the specific "deck". */
     return (
-        <div>   
+        <div>
             <div className='nav-bar'><Link to="/" className='home-link' >
-                <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" alt="home" className='home-icon'/>
-                Home</Link> / <Link to={`/decks/${deckId}`}>Deck {deckName}</Link> / Edit Card {card.id}</div>
-                <h1>Edit Card</h1>
-            <form onSubmit={handleSubmit}>
-                <label htmlfor="EditCard-front-text" className='EditCard-front-text-label' >
-                    Front
-                    <textarea id="EditCard-front-text" name="EditCard-front-text"
-                     placeholder={card.front}
-                      onChange={handleChange} required  defaultValue={card.front} ></textarea>
-                </label>
-                <label htmlfor="EditCard-back-text" >Back
-                    <textarea id="EditCard-back-text" name="EditCard-back-text" 
-                     placeholder={card.back} required 
-                     onChange={handleChange} defaultValue={card.back}  />
-                </label>
-                <button type="button" className="EditCard-cancel-btn btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
-                <button type="submit" className="EditCard-submit-btn btn btn-primary" >Submit</button>
-            </form>
+                <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" className='home-icon' alt="home"/>
+                Home</Link> / <Link to={`/decks/${deckId}`}>{deckName}</Link> / Study</div>
+            <h1>Study: {deckName}</h1>
+           { deckCards.length >= 3 ?
+              <div>
+                <h3>Card {currentCardNumber} of {deckCards.length}</h3>
+                <p> {currentCardText} </p>
+                    {buttonsToDisplay}
+              </div>
+          : <div>
+                <h2>Not enough cards.</h2>
+                <p>You need at least 3 cards to study. There are {deckCards.length} in this deck.</p>
+                 <button className='Study-add-cards-to-deck btn btn-primary'
+                 onClick={() => navigate(`/decks/${deckId}/cards/new`)} > 
+                    <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>Add Cards</button>
+            </div>
+            }
         </div>
     );
 }
 
-/* Exports the "EditCard" 'function/component'. */
-export default EditCard;
+/* Exports the "Study" 'function/component'. */
+export default Study;
