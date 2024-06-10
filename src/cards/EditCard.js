@@ -80,10 +80,19 @@ function EditCard() {
         const currentDeck = await readDeck(deckId, abortController.signal);
         setDeck(currentDeck);
         setDeckName(currentDeck.name)
-        const currentCard = await readCard(cardId, abortController.signal);
-        setCard(currentCard);
+        
         } getDeck();
     }, [card]);
+
+    useEffect(() => {
+        async function getCardNameAndDescription() {
+            const currentCard = await readCard(cardId, abortController.signal);
+            setCard(currentCard);
+            setFrontCardText(currentCard.front);
+            setBackCardText(currentCard.back);
+        }getCardNameAndDescription();
+    }, [])
+
 
     /* This 'useEffect' 'component' runs every time the "waitForCardToUpdate" 
     'variable' changes. An 'if statement' checks if the "card" 'variable' is equal
@@ -151,6 +160,7 @@ function EditCard() {
         that the user 'inputs' and the "setWaitForCardToUpdate" is 'called' 
         which triggers the 'useEffect' the 'updates' the specific "card" on the 
          'local server'. */
+        
     const handleSubmit = event => {
         event.preventDefault();
         setCard({
@@ -159,7 +169,7 @@ function EditCard() {
             back: backCardText,
             deckId: Number(card.deckId)
         });
-        setWaitForCardToUpdate(true);   
+        setWaitForCardToUpdate(true);           
     }
 
     /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
@@ -187,16 +197,16 @@ function EditCard() {
                 Home</Link> / <Link to={`/decks/${deckId}`}>Deck {deckName}</Link> / Edit Card {card.id}</div>
                 <h1>Edit Card</h1>
             <form onSubmit={handleSubmit}>
-                <label htmlfor="EditCard-front-text" className='EditCard-front-text-label' >
+                <label htmlFor="EditCard-front-text" className='EditCard-front-text-label' >
                     Front
                     <textarea id="EditCard-front-text" name="EditCard-front-text"
-                     placeholder={card.front}
-                      onChange={handleChange} defaultValue={card.front} required ></textarea>
+                     placeholder={frontCardText}
+                      onChange={handleChange} value={frontCardText} required ></textarea>
                 </label>
-                <label htmlfor="EditCard-back-text" >Back
+                <label htmlFor="EditCard-back-text" >Back
                     <textarea id="EditCard-back-text" name="EditCard-back-text" 
-                     placeholder={card.back} 
-                     onChange={handleChange} defaultValue={card.back} required  />
+                     placeholder={backCardText} 
+                     onChange={handleChange}  value={backCardText} required  />
                 </label>
                 <button type="button" className="EditCard-cancel-btn btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
                 <button type="submit" className="EditCard-submit-btn btn btn-primary" >Submit</button>
