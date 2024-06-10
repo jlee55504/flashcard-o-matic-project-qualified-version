@@ -127,11 +127,6 @@ and the "EditCard" 'components' via 'Route' JSX 'elements'.*/
       <Header />
       <div className="container">
         {/* TODO: Implement the screen starting here */}
-        {location.pathname === "/" ? 
-    <button type="button"  className="create-deck-btn btn btn-secondary" onClick={() => navigate("/decks/new")} >
-    <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>
-    Create Deck</button>
- : <></>}
     {createDeckBtn}
     {decks}
           <Routes>
