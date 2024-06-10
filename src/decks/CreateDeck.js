@@ -74,10 +74,10 @@ function CreateDeck() {
             <form onSubmit={handleSubmit}>
                 <label htmlFor='CreateDeck-name'>
                     Name
-                    <input type='text' name="CreateDeck-name" id="CreateDeck-name" placeholder='Deck Name' onChange={handleChange} value={name} />
+                    <input type='text' name="CreateDeck-name" id="CreateDeck-name" placeholder='Deck Name' onChange={handleChange} value={name} required />
                 </label>
                 <label htmlFor='CreateDeck-description'>
-                    Description<textarea id="CreateDeck-description" name="CreateDeck-description" placeholder='Brief description of the deck' onChange={handleChange} value={description} ></textarea>
+                    Description<textarea id="CreateDeck-description" name="CreateDeck-description" placeholder='Brief description of the deck' onChange={handleChange} value={description} required ></textarea>
                 </label>
                 <button type='button' className='CreateDeck-cancel-btn btn btn-secondary' onClick={() => navigate("/")}>Cancel</button>
                 <button type='submit' className='CreateDeck-submit-btn btn btn-primary' >Submit</button>
