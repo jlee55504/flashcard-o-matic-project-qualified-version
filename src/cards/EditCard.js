@@ -45,13 +45,9 @@ function EditCard() {
   'function/component' using 'await' with the "deckId" 'variable'and 
   "abortController.signal" as its arguments (which is stored in the 
     "currentDeck" 'variable'). The "deck" 'variable' is then 'set' with 
-    data retrieved from the "selectedDeck" 'variable', the "deckName" 
+    data retrieved from the "selectedDeck" 'variable', and the "deckName" 
     'variable' is 'set' with the "setDeckName" 'function' using the "currentDeck"
-     'variable's' "name" 'key' 'value', the "readCard" 'function/component' is 
-     'called' with the "cardId" 'variable' and "abortController.signal" for 
-     'arguments' (which is stored in the "currentCard" 'variable') and the "card"
-      'variable' is set with the "cards" 'key' from the "currentCard" 'variable's'
-       'value' using the "setCard" 'function'. This code 'updates' the user's 
+     'variable's' "name" 'key' 'value'. This code 'updates' the user's 
        screen to show the 'link' to the "Deck.js" 'file' of the selected "deck".
         The "handleChange" 'function' that takes an 'object' 'parameter' named 
     "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
@@ -79,8 +75,7 @@ function EditCard() {
     async function getDeck() {
         const currentDeck = await readDeck(deckId, abortController.signal);
         setDeck(currentDeck);
-        setDeckName(currentDeck.name)
-        
+        setDeckName(currentDeck.name)  
         } getDeck();
     }, [card]);
 
