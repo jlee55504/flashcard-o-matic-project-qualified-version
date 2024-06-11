@@ -61,7 +61,7 @@ function Layout() {
       const listOfDecks = await listDecks(abortController.signal);
       setDecksList(listOfDecks);
     } getDecks();
-  }, [navigate]);
+  }, [navigate] );
 
 /* The "handleDeleteDeck" has one parameter ("deckId") and displays a 
 'window.confirm' screen asking if the user want to delete the specified "deck". 

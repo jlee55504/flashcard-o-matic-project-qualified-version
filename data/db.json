@@ -54,6 +54,30 @@
       "back": "What?",
       "deckId": 1,
       "id": 8
+    },
+    {
+      "front": "uyy",
+      "back": "tttyy",
+      "deckId": 1,
+      "id": 9
+    },
+    {
+      "front": "yyt",
+      "back": "yyyy",
+      "deckId": 1,
+      "id": 10
+    },
+    {
+      "front": "8yoy9u.p9u",
+      "back": "p//jop/",
+      "deckId": 2,
+      "id": 11
+    },
+    {
+      "front": "p/i/i/i",
+      "back": "{P",
+      "deckId": 2,
+      "id": 12
     }
   ]
 }

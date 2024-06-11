@@ -155,7 +155,10 @@ function Study() {
          setIsCardFlipped(false);
          return;
         }    
-        else if (confirm == false) navigate("/");
+        else if (confirm == false) { 
+            navigate("/");
+            return;
+        }
      } 
 
     /* If the "isCardFlipped" 
