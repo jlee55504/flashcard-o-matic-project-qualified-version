@@ -26,7 +26,7 @@ import Study from '../cards/Study';
 /* Imports the "listDecks" and "deleteDeck" 'functions/components'
  from '../utils/api/index.js'. */
 import { listDecks, deleteDeck } from '../utils/api/index';
-
+import AddEditCards from '../cards//AddEditCards';
 
 /* The "Layout" 'function/component' diplays the "Header" 'component' and the 
 "Home.js", "Study.js", "CreateDeck.js", "Deck.js", "EditDeck.js", "AddCard.js", 
@@ -135,8 +135,8 @@ and the "EditCard" 'components' via 'Route' JSX 'elements'.*/
             <Route path="/decks/:deckId/*" element={<Deck />} />
             <Route path="/decks/:deckId/study/*" element={<Study />} />
             <Route path="/decks/:deckId/edit/*" element={<EditDeck />} />
-            <Route path="/decks/:deckId/cards/new/*" element={<AddCard />} />
-            <Route path="/decks/:deckId/cards/:cardId/edit/*" element={<EditCard />} />
+            <Route path="/decks/:deckId/cards/new/*" element={<><AddCard /><AddEditCards /></>} />
+            <Route path="/decks/:deckId/cards/:cardId/edit/*" element={<><EditCard /><AddEditCards /></>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
       </div>      

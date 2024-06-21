@@ -41,7 +41,7 @@ function EditDeck() {
             setDeckDescription(currentDeck.description);
         }
         getDeck();
-    }, [updateDeck]);
+    }, [deckId]);
 
     /* When the "waitForDeckToUpdate" 'variable' changes, a 'useEffect' 
     'component' runs checking if the "deck" 'variable' if 'falsey'. If so, 

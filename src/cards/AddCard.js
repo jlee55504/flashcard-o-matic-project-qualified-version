@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react';
 import { classNames } from '../utils/class-names/index';
 /* Imports the 'useParams', 'Link', and the 'useNavigate' 'components' from 
 'react-router-dom'. */
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, Routes, Route } from 'react-router-dom';
 /* Imports the "readDeck" and the "createCard" 'functions/components'
  from '../utils/api/index.js'. */
 import { createCard, readDeck } from '../utils/api/index';
 
+import AddEditCards from './AddEditCards';
 /* The "AddCard" 'function/component' allows users to add a "card" to the 
 specific "deck" and 'local server'. */
 function AddCard() {
@@ -22,11 +23,16 @@ function AddCard() {
     const [frontCardText, setFrontCardText] = useState("");
     /* The "backCardText" 'variable' and the "setBackCardText" 'function' 
     are 'declared' using the 'useState' (which is set to an empty 'string' ("")). */
-    const [backCardText, setbackCardText] = useState("");
+    const [backCardText, setBackCardText] = useState("");
      /* The "abortcontroller" holds a 'new AbortController' 'method'. */
     const abortController = new AbortController();
     /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
     const navigate = useNavigate();
+
+//    const [AddEditCardCardId, setAddEditCardCardId] = useState(deckId);
+
+    const [deck, setDeck] = useState([]);
+    const [waitToAddCard, setWaitToAddCard] = useState(false);
 
     /* This 'useEffect' 'component' runs only once when the web page first loads. 
      The 'async function' "getDeck" uses the "readDeck" with 'await' 
@@ -38,22 +44,43 @@ function AddCard() {
     using the specific "deck". */
     useEffect(() => {    
         async function getDeck() {
-            const selectedDeck = await readDeck(deckId, abortController.signal);
-            setDeckName(selectedDeck.name);
+            try {
+                const selectedDeck = await readDeck(deckId, abortController.signal);
+                setDeck(selectedDeck);
+                setDeckName(selectedDeck.name);
+            }catch (error) { 
+                console.error(error); 
+            } 
         } getDeck();
-    }, []);
+        return () => abortController.abort(); 
+    }, [deckName]);
     
+
+ /*   useEffect(() => {  
+         if (waitToAddCard) { 
+            async function createCardData() { 
+                try { 
+                    await createCard(deckId, {front: frontCardText, back: backCardText}, abortController.signal);
+                    setFrontCardText("");
+                    setBackCardText("");
+                     } catch (error) { 
+                        console.error(error); 
+                    }
+                 } createCardData(); 
+                } return () => abortController.abort();
+            }, [waitToAddCard]);*/
+
     /* The "handleChange" 'function' that takes an 'object' 'parameter' named 
     "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
-    equal to "AddCard-front-card". If so, the "setFrontCardText" is 'called' with
+    equal to "AddCard-front-text". If so, the "setFrontCardText" is 'called' with
      the "target" 'parameter's' 'value' as its 'argument'. Next, the "target" 
-     'parameter's' 'name' 'attribute' is equal to "AddCard-back-card", the 
+     'parameter's' 'name' 'attribute' is equal to "AddCard-back-text", the 
      "setBackCardText" 'function' is 'called' with the "target" 'parameter's' 
      'value' as its 'argument'. This code 'sets' the "frontCardText" and the 
      "backCardText" 'variables' are 'set' with the data the user inputs. */
     const handleChange = ({ target }) => {
-        if (target.name === "AddCard-front-card") setFrontCardText(target.value);
-        else if (target.name === "AddCard-back-card") setbackCardText(target.value);
+        if (target.name === "AddCard-front-text") setFrontCardText(target.value);
+        else if (target.name === "AddCard-back-text") setBackCardText(target.value);
     }
 
     /* The "handleSubmit" 'function' takes a 'parameter' named "event". The 
@@ -69,10 +96,7 @@ function AddCard() {
       and the 'local server'. */
     const handleSubmit = event => {
         event.preventDefault();
-        createCard(deckId, {front: frontCardText, back: backCardText}, abortController.signal);
-        setFrontCardText("");
-        setbackCardText("");
-
+        setWaitToAddCard(true); 
     }
 
     /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
@@ -101,16 +125,26 @@ function AddCard() {
             <div className='nav-bar'><Link to="/" className='home-link' >
                 <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" alt="home" className='home-icon'/>Home </Link> / <Link to={`/decks/${deckId}`}> {deckName}</Link> / Add Card</div>
         <h2 className='AddCard-deck-name-h2'> {deckName}: </h2><h2 className='AddCard-add-card-h2'> Add Card</h2>
-                <form onSubmit={handleSubmit}>
-                    <label htmlFor='AddCard-front-card'>
-                        Front<textarea id="AddCard-front-card" name="AddCard-front-card" placeholder='Front side of card' onChange={handleChange}  value={frontCardText} required ></textarea>
+               {/* <form onSubmit={handleSubmit}>
+                    <label htmlFor='AddCard-front-text'>
+                        Front<textarea id="AddCard-front-text" name="AddCard-front-text" 
+                        placeholder='Front side of card' onChange={handleChange}  
+                        value={frontCardText} required ></textarea>
                     </label>
-                    <label htmlFor='AddCard-back-card'>
-                    Back<textarea id="AddCard-back-card" name="AddCard-back-card" placeholder='Back side of card' onChange={handleChange} value={backCardText} required ></textarea>
+                    <label htmlFor='AddCard-back-text'>
+                        Back<textarea id="AddCard-back-text" name="AddCard-back-text" 
+                        placeholder='Back side of card' onChange={handleChange} value={backCardText} 
+                        required ></textarea>
                     </label>
-                <button type="button" className='AddCard-done-btn btn btn-secondary' onClick={() => navigate(`/decks/${deckId}`)} >Done</button>
-                <button  type='submit' className='AddCard-save-btn btn btn-primary' >Save</button>
-                </form>
+                <button type="button" className='AddCard-done-btn btn btn-secondary' 
+                onClick={() => navigate(`/decks/${deckId}`)} >Done</button>
+                <button type='submit' className='AddCard-submit-btn btn btn-primary' >Save</button>
+                </form> 
+                <AddEditCards cardId={null}  />
+                */}
+                <Routes>
+            <Route path="/new/*" element={<AddEditCards />} />
+         </Routes>
             </div>
     );
 }

@@ -2,12 +2,14 @@
 import React, { useState, useEffect } from 'react';
 /* Imports the 'useParams', 'Link', and the 'useNavigate' 'components' from 
 'react-router-dom'. */
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, Routes, Route } from 'react-router-dom';
 /* Imports the "readDeck", "updateCard", and the "readCard" 'functions/components'
  from '../utils/api/index.js'. */
 import { readDeck, updateCard, readCard } from '../utils/api/index';
 /* Imports the "classNames" from '../utils/class-names/index.js'. */
 import { classNames } from '../utils/class-names/index';
+
+import AddEditCards from './AddEditCards';
 
 /* The "EditCard" 'function/component' displays the "nav-bar" 'div'. which 
 (contains a 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" 
@@ -25,21 +27,22 @@ function EditCard() {
   const [backCardText, setBackCardText] = useState("");
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
   const navigate = useNavigate();
-  /*The "deck" 'variable' and the "setDeck" 'function' are declared 
-    using the 'useState' 'component' with an empty 'object' ('{}') as its argument.  */
-  const [deck, setDeck] = useState({});
+
   /* The "deckName" 'variable' and the "setDeckName" 'function' are 'declared' 
   using the 'useState' 'component' with an empty 'string' ("") as its argument. */
   const [deckName, setDeckName] = useState("");
   /* The "card" 'variable' and the "setCard" 'function' are 'declared' using the 
   'useState' (which is set to an empty 'string' ("")). */
-  const [card, setCard] = useState({});
+  const [card, setCard] = useState([]);
   /* The "waitForCardToUpdate" 'variable' and the "setWaitForCardToUpdate" 
   'function' are 'declared' using the 'useState' (which is set to 'false'). */
   const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false); 
+      /* The "deck" 'variable' and the "setDeck" 'function' are declared 
+    using the 'useState' 'component' with an empty 'array' ('[]') as its argument. */
+    const [ deck, setDeck ] = useState([]);
   /* The "abortcontroller" holds a 'new AbortController' 'method'. */
   const abortController = new AbortController();
-
+const [ waitforDeckHeader, setWaitForDeckHeader ] = useState(false);
   /* This 'useEffect' 'component' runs every time the "card" and 'variable' 
   change using the 'async function' "getDeck" which calls the "readDeck" 
   'function/component' using 'await' with the "deckId" 'variable'and 
@@ -71,24 +74,71 @@ function EditCard() {
         that the user 'inputs' and the "setWaitForCardToUpdate" is 'called' 
         which triggers the 'useEffect' the 'updates' the specific "card" on the 
          'local server'. */  
-  useEffect(() => {
-    async function getDeck() {
-        const currentDeck = await readDeck(deckId, abortController.signal);
-        setDeck(currentDeck);
-        setDeckName(currentDeck.name)  
-        } getDeck();
-    }, [card]);
-
-    useEffect(() => {
-        async function getCardNameAndDescription() {
-            const currentCard = await readCard(cardId, abortController.signal);
-            setCard(currentCard);
-            setFrontCardText(currentCard.front);
-            setBackCardText(currentCard.back);
-        }getCardNameAndDescription();
-    }, [])
+ /*
+ useEffect(() => {
+    async function updateDeckHeader() {
+        try{
+        setWaitForDeckHeader(true)
+        } catch (error) {
+         console.log(error)
+         } updateDeckHeader()
+          return abortController.abort();
+    }})
 
 
+
+     useEffect(() => { 
+             async function getDeck() {
+                try { 
+                    const currentDeck = await readDeck(deckId, abortController.signal);
+                    setDeck(currentDeck);
+                      setDeckName(currentDeck.name);
+                     } catch (error) { 
+                        console.error(error); 
+                    } 
+                } getDeck(); 
+                return () => abortController.abort();
+            }, [card]);
+ */
+ 
+            useEffect(() => {
+                async function updateDeckHeader() {
+                    try{
+                    setWaitForDeckHeader(true);
+                    } catch (error) {
+                     console.log(error)
+                     } 
+                } updateDeckHeader()
+                return abortController.abort();
+            },[deckId])
+
+         useEffect(() => { 
+             async function getDeck() {
+                try { 
+                    const currentDeck = await readDeck(deckId, abortController.signal);
+                    setDeck(currentDeck);
+                      setDeckName(currentDeck.name);
+                     } catch (error) { 
+                        console.error(error); 
+                    } 
+                } getDeck(); 
+                return () => abortController.abort();
+            }, [waitforDeckHeader]);
+
+           /* useEffect(() => { 
+                async function getCard() { 
+                    try { 
+                       const currentCard = await readCard(cardId, abortController.signal);
+                        setCard(currentCard); 
+                       // setFrontCardText(currentCard.front);
+                      //  setBackCardText(currentCard.back); 
+                       } catch (error) { 
+                           console.error(error); 
+                       } 
+                   } getCard(); 
+                   return () => abortController.abort();
+               }, [deckName]);*/
+            
     /* This 'useEffect' 'component' runs every time the "waitForCardToUpdate" 
     'variable' changes. An 'if statement' checks if the "card" 'variable' is equal
      to an empty 'object' and the "waitForCardToUpdate" 'variable' is 'true'. If 
@@ -118,15 +168,21 @@ function EditCard() {
          "deckId" 'variable' as its 'argument. The second 'button' JSX 'element'
           has the 'text' "Submit". This code holds the 'links' to the "Home page" 
           and "Deck.js" 'files' and a 'form' to 'update' the selected "card". */
-    useEffect(() => {   
-        if (card != {} && waitForCardToUpdate) {
-            updateCard(card, abortController.signal);
-            setWaitForCardToUpdate(false);
-            setFrontCardText("");
-            setBackCardText("");
-            navigate(`/decks/${deckId}`);
-        } else return;
-    }, [waitForCardToUpdate])
+      /*    useEffect(() => { 
+             if (waitForCardToUpdate) { 
+                async function updateCardData() { 
+                    try { 
+                        await updateCard(card, abortController.signal);
+                         setWaitForCardToUpdate(false);
+                          setFrontCardText("");
+                           setBackCardText("");
+                            navigate(`/decks/${deckId}`);
+                         } catch (error) { 
+                            console.error(error); 
+                        }
+                     } updateCardData(); 
+                    } return () => abortController.abort();
+                }, [waitForCardToUpdate, card, navigate, deckId]);*/
 
     /* The "handleChange" 'function' that takes an 'object' 'parameter' named 
     "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
@@ -156,16 +212,13 @@ function EditCard() {
         which triggers the 'useEffect' the 'updates' the specific "card" on the 
          'local server'. */
         
-    const handleSubmit = event => {
-        event.preventDefault();
-        setCard({
-            id: Number(card.id),
-            front: frontCardText,
-            back: backCardText,
-            deckId: Number(card.deckId)
-        });
-        setWaitForCardToUpdate(true);           
-    }
+         const handleSubmit = event => { 
+            event.preventDefault();
+             setCard({ id: Number(card.id), front: frontCardText, back: backCardText, 
+                deckId: Number(card.deckId), 
+            }); 
+            setWaitForCardToUpdate(true); 
+        };
 
     /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
     contains a 'Link' JSX 'component' (which brings users to the "Home page") with
@@ -185,13 +238,118 @@ function EditCard() {
      the 'text' "Submit". This code holds the 'links' to the "Home page" and 
      "Deck.js" which displays the proper info fo the specifified "deck" 'file' and
       a 'form' to 'update' the selected "card". */
+
+/*
+const [card, setCard] = useState({});
+ const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false);
+  const abortController = new AbortController();
+
+
+const [card, setCard] = useState({});
+ const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false);
+useEffect(() => { 
+    async function getDeck() { 
+        const currentDeck = await readDeck(deckId, abortController.signal);
+         setDeck(currentDeck);
+          setDeckName(currentDeck.name);
+         } getDeck(); 
+        }, [card]);
+
+
+useEffect(() => { 
+    const abortController = new AbortController();
+     async function getDeck() { 
+        try { 
+            const currentDeck = await readDeck(deckId, abortController.signal);
+              setDeckName(currentDeck.name);
+             } catch (error) { 
+                console.error(error); 
+            } 
+        } getDeck(); 
+        return () => abortController.abort(); // Cleanup 
+    }, [deckId]);
+
+
+useEffect(() => { 
+    async function getCardNameAndDescription() { 
+        const currentCard = await readCard(cardId, abortController.signal);
+         setCard(currentCard);
+          setFrontCardText(currentCard.front);
+           setBackCardText(currentCard.back);
+         } getCardNameAndDescription(); 
+        }, []);
+
+
+useEffect(() => { 
+     async function getCard() { 
+        try { 
+            const currentCard = await readCard(cardId, abortController.signal);
+             setCard(currentCard); 
+             setFrontCardText(currentCard.front);
+             setBackCardText(currentCard.back); 
+            } catch (error) { 
+                console.error(error); 
+            } 
+        } getCard(); 
+        return () => abortController.abort();
+    }, [cardId]);
+
+
+useEffect(() => { 
+    if (card != {} && waitForCardToUpdate) { 
+        updateCard(card, abortController.signal);
+         setWaitForCardToUpdate(false);
+          setFrontCardText("");
+           setBackCardText("");
+            navigate(`/decks/${deckId}`);
+         } else return; 
+        }, [waitForCardToUpdate]);
+
+        
+useEffect(() => { 
+    const abortController = new AbortController();
+     if (waitForCardToUpdate) { 
+        async function updateCardData() { 
+            try { 
+                await updateCard(card, abortController.signal);
+                 setWaitForCardToUpdate(false);
+                  setFrontCardText("");
+                   setBackCardText("");
+                    navigate(`/decks/${deckId}`);
+                 } catch (error) { 
+                    console.error(error); 
+                }
+             } updateCardData(); 
+            } return () => abortController.abort(); // Cleanup 
+        }, [waitForCardToUpdate, card, navigate, deckId]);
+
+
+const handleSubmit = event => { 
+    event.preventDefault();
+     setCard(
+        { id: Number(card.id), front: frontCardText, back: backCardText, 
+            deckId: Number(card.deckId) 
+        }); 
+        setWaitForCardToUpdate(true); 
+    }
+
+const handleSubmit = (event) => { 
+    event.preventDefault();
+     setCard({ id: Number(card.id), front: frontCardText, back: backCardText, 
+        deckId: Number(card.deckId), 
+    }); 
+    setWaitForCardToUpdate(true); 
+};
+*/
+
     return (
         <div>   
             <div className='nav-bar'><Link to="/" className='home-link' >
-                <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" alt="home" className='home-icon'/>
-                Home</Link> / <Link to={`/decks/${deckId}`}>Deck {deckName}</Link> / Edit Card {card.id}</div>
+                <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" 
+                alt="home" className='home-icon'/>
+                Home</Link> / <Link to={`/decks/${deckId}`}>Deck {deck.name}</Link> / Edit Card {card.id}</div>
                 <h1>Edit Card</h1>
-            <form onSubmit={handleSubmit}>
+          {/* <form onSubmit={handleSubmit}>
                 <label htmlFor="EditCard-front-text" className='EditCard-front-text-label' >
                     Front
                     <textarea id="EditCard-front-text" name="EditCard-front-text"
@@ -206,6 +364,11 @@ function EditCard() {
                 <button type="button" className="EditCard-cancel-btn btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
                 <button type="submit" className="EditCard-submit-btn btn btn-primary" >Submit</button>
             </form>
+            <AddEditCards />
+            */}
+         <Routes>
+            <Route path="/edit/*" element={<AddEditCards />} />
+         </Routes>
         </div>
     );
 }
