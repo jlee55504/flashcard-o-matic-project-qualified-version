@@ -89,6 +89,12 @@
       "front": "What did the egg say to the frying pan?",
       "back": "You crack me up!",
       "deckId": 1
+    },
+    {
+      "id": 18,
+      "front": "A??",
+      "back": "B!!!!",
+      "deckId": 1
     }
   ]
 }

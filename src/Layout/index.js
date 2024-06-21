@@ -130,7 +130,7 @@ and the "EditCard" 'components' via 'Route' JSX 'elements'.*/
     {createDeckBtn}
     {decks}
           <Routes>
-            <Route path="/" element={Layout} />
+            <Route path="/" element={Layout} /> 
             <Route path="/decks/new" element={<CreateDeck />} />
             <Route path="/decks/:deckId/*" element={<Deck />} />
             <Route path="/decks/:deckId/study/*" element={<Study />} />
