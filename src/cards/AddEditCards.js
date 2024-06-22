@@ -57,7 +57,7 @@ import { useParams, useNavigate } from 'react-router-dom';
                   console.error(error); 
               } 
           } getCard(); 
-          return () => abortController.abort();
+            return () => abortController.abort();
         } else return;
       }, [updateEditCardText]);
 
@@ -99,23 +99,22 @@ import { useParams, useNavigate } from 'react-router-dom';
                    await createCard(deckId, {front: frontCardText, back: backCardText}, abortController.signal);
                    setFrontCardText("");
                    setBackCardText("");
-                    } catch (error) { 
+                } catch (error) { 
                        console.error(error); 
-                   }
-                } createCardData(); 
-               } return () => abortController.abort();
-           }, [waitToAddCard]);
+                  }
+              } createCardData(); 
+            }  return () => abortController.abort();
+      }, [waitToAddCard]);
 
        useEffect(() => { 
-        if (waitForCardToUpdate && cardId) { 
-            
+        if (waitForCardToUpdate && cardId) {             
            async function updateCardData() { 
                try { 
                    await updateCard(card, abortController.signal);
-                    setWaitForCardToUpdate(false);
+                     setWaitForCardToUpdate(false);
                      setFrontCardText("");
-                      setBackCardText("");
-                       navigate(`/decks/${deckId}`);
+                     setBackCardText("");
+                     navigate(`/decks/${deckId}`);
                     } catch (error) { 
                        console.error(error); 
                    }
@@ -125,24 +124,23 @@ import { useParams, useNavigate } from 'react-router-dom';
 
 
        const handleChange = ({ target }) => {
-        if(cardId) {
+          if(cardId) {
             if (target.name === "EditCard-front-text") setFrontCardText(target.value);
             else if (target.name === "EditCard-back-text") setBackCardText(target.value);
-    } else {
-        if (target.name === "AddCard-front-text") setFrontCardText(target.value);
-        else if (target.name === "AddCard-back-text") setBackCardText(target.value);
-    }
-    }
+         } else {
+            if (target.name === "AddCard-front-text") setFrontCardText(target.value);
+            else if (target.name === "AddCard-back-text") setBackCardText(target.value);
+          }
+        }
 
        const handleSubmit = event => { 
         event.preventDefault();
-        console.log(card)
-         if (cardId) {
+          if (cardId) {
             setCard({ id: Number(card.id), front: frontCardText, back: backCardText, 
             deckId: Number(card.deckId), 
         }); 
         setWaitForCardToUpdate(true);
-     } else setWaitToAddCard(true); 
+      } else setWaitToAddCard(true); 
     };
     
        return (
@@ -162,9 +160,7 @@ import { useParams, useNavigate } from 'react-router-dom';
                 <button type="button" className={cardId ? "EditCard-cancel-btn btn btn-secondary" : 'AddCard-done-btn btn btn-secondary' } onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
                 <button type="submit" className={cardId ? "EditCard-submit-btn btn btn-primary" : 'AddCard-submit-btn btn btn-primary'} >Submit</button>
             </form>
-
         )
-  
  }
 
  export default AddEditCards;
