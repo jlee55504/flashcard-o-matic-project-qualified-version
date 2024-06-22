@@ -2,13 +2,13 @@
 import React, { useState, useEffect } from 'react';
 /* Imports the 'useParams', 'Link', and the 'useNavigate' 'components' from 
 'react-router-dom'. */
-import { useParams, useNavigate, Link } from 'react-router-dom';
+import { useParams, useNavigate, Link, Routes, Route } from 'react-router-dom';
 /* Imports the "readDeck", "updateCard", and the "readCard" 'functions/components'
  from '../utils/api/index.js'. */
 import { readDeck, updateCard, readCard } from '../utils/api/index';
 /* Imports the "classNames" from '../utils/class-names/index.js'. */
 import { classNames } from '../utils/class-names/index';
-
+import AddEditCards from './AddEditCards';
 /* The "EditCard" 'function/component' displays the "nav-bar" 'div'. which 
 (contains a 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" 
 (which displays the specified "decks" info) and a 'form' which allows users to 
@@ -39,6 +39,7 @@ function EditCard() {
   const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false); 
   /* The "abortcontroller" holds a 'new AbortController' 'method'. */
   const abortController = new AbortController();
+  const [displayDeckName, setDisplayDeckName] = useState(false);
 
   /* This 'useEffect' 'component' runs every time the "card" and 'variable' 
   change using the 'async function' "getDeck" which calls the "readDeck" 
@@ -71,13 +72,20 @@ function EditCard() {
         that the user 'inputs' and the "setWaitForCardToUpdate" is 'called' 
         which triggers the 'useEffect' the 'updates' the specific "card" on the 
          'local server'. */  
-  useEffect(() => {
+  
+         
+         useEffect(() => {
+            setDisplayDeckName(true);
+            }, [deckId])
+         
+  
+         useEffect(() => {
     async function getDeck() {
         const currentDeck = await readDeck(deckId, abortController.signal);
         setDeck(currentDeck);
         setDeckName(currentDeck.name)  
         } getDeck();
-    }, [card]);
+    }, [displayDeckName]);
 
     useEffect(() => {
         async function getCardNameAndDescription() {
@@ -126,7 +134,7 @@ function EditCard() {
             setBackCardText("");
             navigate(`/decks/${deckId}`);
         } else return;
-    }, [waitForCardToUpdate])
+    }, [waitForCardToUpdate]);
 
     /* The "handleChange" 'function' that takes an 'object' 'parameter' named 
     "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
@@ -191,7 +199,7 @@ function EditCard() {
                 <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" alt="home" className='home-icon'/>
                 Home</Link> / <Link to={`/decks/${deckId}`}>Deck {deckName}</Link> / Edit Card {card.id}</div>
                 <h1>Edit Card</h1>
-            <form onSubmit={handleSubmit}>
+          {/*  <form onSubmit={handleSubmit}>
                 <label htmlFor="EditCard-front-text" className='EditCard-front-text-label' >
                     Front
                     <textarea id="EditCard-front-text" name="EditCard-front-text"
@@ -205,7 +213,10 @@ function EditCard() {
                 </label>
                 <button type="button" className="EditCard-cancel-btn btn btn-secondary" onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
                 <button type="submit" className="EditCard-submit-btn btn btn-primary" >Submit</button>
-            </form>
+            </form> */}
+            <Routes>
+                    <Route path="/:cardId/edit/" element={<AddEditCards />} />
+                </Routes>
         </div>
     );
 }
