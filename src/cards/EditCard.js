@@ -57,7 +57,8 @@ function EditCard() {
   'file' that displays the current "deck", and the 'text' " / Edit Card ", plus 
   the "card" 'variable's' "id" 'key' 'value', an 'h1' JSX 'element' with the 
   'text' "Edit Card". A 'Routes' and 'Route' 'component' are used to display the 
-  "AddEdditCards.js" 'file/component'. */
+  "AddEdditCards.js" 'file/component' which handles the "EditCard.js" 'file's/component's 
+  functionality'. */
   return (
     <div>   
       <div className='nav-bar'><Link to="/" className='home-link' >
