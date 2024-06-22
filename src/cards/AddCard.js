@@ -38,10 +38,15 @@ function AddCard() {
     using the specific "deck". */
     useEffect(() => {    
         async function getDeck() {
+           try { 
             const selectedDeck = await readDeck(deckId, abortController.signal);
             setDeckName(selectedDeck.name);
+          } catch (error) {
+            console.log(error);
+            }
         } getDeck();
-    }, []);
+          return () => abortController.abort();
+      }, []);
     
     /* The "handleChange" 'function' that takes an 'object' 'parameter' named 
     "target" that first checks if the "target" 'parameter's' 'name' 'attribute' is 
