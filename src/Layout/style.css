@@ -292,7 +292,7 @@ label {
     display: inline;
 }
 
-#AddCard-front-card, #AddCard-back-card {
+#AddCard-front-text, #AddCard-back-text {
     display: block;
     width: 100%;
 }
