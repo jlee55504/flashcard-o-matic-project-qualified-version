@@ -4,11 +4,11 @@ import React, { useEffect, useState } from 'react';
 import { classNames } from '../utils/class-names/index';
 /* Imports the 'useParams', 'Link', and the 'useNavigate' 'components' from 
 'react-router-dom'. */
-import { useParams, Link, useNavigate } from 'react-router-dom';
+import { useParams, Link, useNavigate, Routes, Route } from 'react-router-dom';
 /* Imports the "readDeck" and the "createCard" 'functions/components'
  from '../utils/api/index.js'. */
 import { createCard, readDeck } from '../utils/api/index';
-
+import AddEditCards from './AddEditCards';
 /* The "AddCard" 'function/component' allows users to add a "card" to the 
 specific "deck" and 'local server'. */
 function AddCard() {
@@ -101,7 +101,7 @@ function AddCard() {
             <div className='nav-bar'><Link to="/" className='home-link' >
                 <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" alt="home" className='home-icon'/>Home </Link> / <Link to={`/decks/${deckId}`}> {deckName}</Link> / Add Card</div>
         <h2 className='AddCard-deck-name-h2'> {deckName}: </h2><h2 className='AddCard-add-card-h2'> Add Card</h2>
-                <form onSubmit={handleSubmit}>
+               {/* <form onSubmit={handleSubmit}>
                     <label htmlFor='AddCard-front-card'>
                         Front<textarea id="AddCard-front-card" name="AddCard-front-card" placeholder='Front side of card' onChange={handleChange}  value={frontCardText} required ></textarea>
                     </label>
@@ -110,7 +110,10 @@ function AddCard() {
                     </label>
                 <button type="button" className='AddCard-done-btn btn btn-secondary' onClick={() => navigate(`/decks/${deckId}`)} >Done</button>
                 <button  type='submit' className='AddCard-save-btn btn btn-primary' >Save</button>
-                </form>
+                </form> */}
+                <Routes>
+                    <Route path="/new" element={<AddEditCards />} />
+                </Routes>
             </div>
     );
 }
