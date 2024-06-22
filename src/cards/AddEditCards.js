@@ -3,14 +3,14 @@ import React, { useEffect, useState } from 'react';
 /* Imports the 'useParams' and the 'useNavigate' 'components' from 
 'react-router-dom'. */
 import { useParams, useNavigate } from 'react-router-dom';
-/* Imports the "readDeck" and the "createCard" 'functions/components'
+/* Imports the "createCard", "updateCard", and the "readCard" 'functions/components'
  from '../utils/api/index.js'. */
-/* Imports the "readDeck", "updateCard", and the "readCard" 'functions/components'
- from '../utils/api/index.js'. */
- import { readCard, updateCard, createCard, readDeck } from '../utils/api/index';
+ import { readCard, updateCard, createCard } from '../utils/api/index';
 
- function AddEditCards({ cardI }) {
-    //cardId = Number(cardId);
+ /* The "AddEditCards" 'function/component' handles returns a 'form JSX element' for 
+ the "src/cards/AddCard.js" and "src/cards/EditCard.js" 'files/components' and handles 
+ both of their functionality. */
+ function AddEditCards() {
     const {deckId, cardId} = useParams();
     /* The "card" 'variable' and the "setCard" 'function' are 'declared' using the 
     'useState' (which is set to an empty 'string' ("")). */
@@ -20,132 +20,112 @@ import { useParams, useNavigate } from 'react-router-dom';
     /* The "backCardText" 'variable' and the "setBackCardText" 'function' are 
     'declared' using the 'useState' (which is set to an empty 'string' ("")). */
     const [backCardText, setBackCardText] = useState("");
+    /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
     const navigate = useNavigate();
+
     const [waitToAddCard, setWaitToAddCard] = useState(false);
+    /* The "abortcontroller" holds a 'new AbortController' 'method'. */
     const abortController = new AbortController();
+
     const [updateEditCardText, setUpdateEditCardText] = useState(false);
       /* The "deckName" 'variable' and the "setDeckName" 'function' are 'declared' 
   using the 'useState' 'component' with an empty 'string' ("") as its argument. */
   const [deckName, setDeckName] = useState("");
       /* The "waitForCardToUpdate" 'variable' and the "setWaitForCardToUpdate" 
   'function' are 'declared' using the 'useState' (which is set to 'false'). */
-     /* The "abortcontroller" holds a 'new AbortController' 'method'. */
- // console.log(deckId)
- // console.log(cardId)
   const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false); 
+  
   useEffect(() => { 
     if (cardId) {  
-    async function displayEditCardText() {
-       try { 
-             setUpdateEditCardText(true)
-            } catch (error) { 
-               console.error(error); 
-           } 
-       } displayEditCardText();
-       return () => abortController.abort();
+      async function displayEditCardText() {
+        try { 
+          setUpdateEditCardText(true)
+        } catch (error) { 
+            console.error(error); 
+          } 
+      } displayEditCardText();
+        return () => abortController.abort();
     } else return;
-   }, [deckId]);
+  }, [deckId]);
 
-   useEffect(() => { 
-    if (cardId) {   
-        async function getCard() { 
-           try { 
+    useEffect(() => { 
+      if (cardId) {   
+          async function getCard() { 
+            try { 
               const currentCard = await readCard(cardId, abortController.signal);
-               setCard(currentCard); 
-               setFrontCardText(currentCard.front);
-               setBackCardText(currentCard.back);
-              } catch (error) { 
-                  console.error(error); 
+              setCard(currentCard); 
+              setFrontCardText(currentCard.front);
+              setBackCardText(currentCard.back);
+            } catch (error) { 
+                console.error(error); 
               } 
           } getCard(); 
-          return () => abortController.abort();
-        } else return;
-      }, [updateEditCardText]);
+            return () => abortController.abort();
+      } else return;
+    }, [updateEditCardText]);
 
-
- /* useEffect(() => { 
-             async function getDeck() {
-                try { 
-                    const currentDeck = await readDeck(deckId, abortController.signal);
-                    setDeck(currentDeck);
-                      setDeckName(currentDeck.name);
-                     } catch (error) { 
-                        console.error(error); 
-                    } 
-                } getDeck(); 
-                return () => abortController.abort();
-            }, [deckId]);
-
-            useEffect(() => { 
-                if (cardId) {
-                async function getCard() { 
-                    try { 
-                       const currentCard = await readCard(cardId, abortController.signal);
-                        setCard(currentCard); 
-                        setFrontCardText(currentCard.front);
-                        setBackCardText(currentCard.back); 
-                       } catch (error) { 
-                           console.error(error); 
-                       } 
-                   } getCard(); 
-                   return () => abortController.abort();
-                } else return;
-               }, [deckName]);
-
-*/
        useEffect(() => {  
-        if (waitToAddCard && !cardId) { 
+         if (waitToAddCard && !cardId) { 
            async function createCardData() { 
                try { 
-                   await createCard(deckId, {front: frontCardText, back: backCardText}, abortController.signal);
-                   setFrontCardText("");
-                   setBackCardText("");
-                    } catch (error) { 
+                 await createCard(deckId, {front: frontCardText, back: backCardText}, abortController.signal);
+                 setFrontCardText("");
+                 setBackCardText("");
+               } catch (error) { 
                        console.error(error); 
-                   }
-                } createCardData(); 
-               } return () => abortController.abort();
-           }, [waitToAddCard]);
+                 }
+           } createCardData(); 
+         } return () => abortController.abort();
+       }, [waitToAddCard]);
 
        useEffect(() => { 
-        if (waitForCardToUpdate && cardId) { 
-            
+         if (waitForCardToUpdate && cardId) {  
            async function updateCardData() { 
                try { 
-                   await updateCard(card, abortController.signal);
-                    setWaitForCardToUpdate(false);
-                     setFrontCardText("");
-                      setBackCardText("");
-                       navigate(`/decks/${deckId}`);
-                    } catch (error) { 
+                 await updateCard(card, abortController.signal);
+                 setWaitForCardToUpdate(false);
+                 setFrontCardText("");
+                 setBackCardText("");
+                 navigate(`/decks/${deckId}`);
+                } catch (error) { 
                        console.error(error); 
-                   }
-                } updateCardData(); 
-               } return () => abortController.abort();
-           }, [waitForCardToUpdate, navigate, card, deckId]);
+                  }
+            } updateCardData(); 
+          } return () => abortController.abort();
+        }, [waitForCardToUpdate, navigate, card, deckId]);
 
-
+       /* The "handleChange" 'function' takes an 'object' 'parameter' named 
+       "target" and checks if the "cardId" 'variable's' 'value' is 'truthy'. 
+        If so, the functionality used to handle the "src/cards/EditCard.js" 
+        'file/component' runs. Otherwise, the code used to handle the 
+        "src/cards/AddCard.js" 'file's/component's' functionality is run. */
        const handleChange = ({ target }) => {
-        if(cardId) {
-            if (target.name === "EditCard-front-text") setFrontCardText(target.value);
-            else if (target.name === "EditCard-back-text") setBackCardText(target.value);
-    } else {
-        if (target.name === "AddCard-front-text") setFrontCardText(target.value);
-        else if (target.name === "AddCard-back-text") setBackCardText(target.value);
-    }
-    }
-
+         if(cardId) {
+           if (target.name === "EditCard-front-text") setFrontCardText(target.value);
+           else if (target.name === "EditCard-back-text") setBackCardText(target.value);
+         } else {
+            if (target.name === "AddCard-front-text") setFrontCardText(target.value);
+            else if (target.name === "AddCard-back-text") setBackCardText(target.value);
+         }
+       }
+       /* The "handleSubmit" 'function' takes a 'parameter' named "event". The 
+       'method' 'preventDefault' is 'called' with the "event" 'parameter'. Then, 
+       the "cardId" 'variable's' is checked for a 'truthy value'.If so, the 
+       functionality used to handle the "src/cards/EditCard.js" 'file/component' 
+       runs. Otherwise, the code used to handle the "src/cards/AddCard.js" 
+       'file's/component's' functionality is run. */
        const handleSubmit = event => { 
-        event.preventDefault();
-        console.log(card)
+         event.preventDefault();
          if (cardId) {
             setCard({ id: Number(card.id), front: frontCardText, back: backCardText, 
             deckId: Number(card.deckId), 
-        }); 
-        setWaitForCardToUpdate(true);
-     } else setWaitToAddCard(true); 
-    };
-    
+           }); 
+          setWaitForCardToUpdate(true);
+        } else setWaitToAddCard(true); 
+      };
+
+       /* A 'form JSX element' is returned with 'attribute values' based on the 
+       'value' of the "cardId" 'variable'. */
        return (
                 <form onSubmit={handleSubmit}>
                 <label htmlFor={cardId ? "EditCard-front-text" : 'AddCard-front-text'} className={cardId ? 'EditCard-front-text-label' : ""} >
@@ -163,9 +143,8 @@ import { useParams, useNavigate } from 'react-router-dom';
                 <button type="button" className={cardId ? "EditCard-cancel-btn btn btn-secondary" : 'AddCard-done-btn btn btn-secondary' } onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
                 <button type="submit" className={cardId ? "EditCard-submit-btn btn btn-primary" : 'AddCard-submit-btn btn btn-primary'} >Submit</button>
             </form>
-
-        )
-  
+        );
  }
 
- export default AddEditCards;
+  /* Exports the "AddEditCards" 'function/component'. */
+  export default AddEditCards;
