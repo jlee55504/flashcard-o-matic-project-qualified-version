@@ -112,7 +112,7 @@ function AddCard() {
                 <button  type='submit' className='AddCard-save-btn btn btn-primary' >Save</button>
                 </form> */}
                 <Routes>
-                    <Route path="/new" element={<AddEditCards />} />
+                    <Route path="/cards/new/" element={<AddEditCards />} />
                 </Routes>
             </div>
     );
