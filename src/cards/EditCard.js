@@ -74,26 +74,40 @@ function EditCard() {
          'local server'. */  
   
          
-         useEffect(() => {
+    useEffect(() => {
+        try {
             setDisplayDeckName(true);
-            }, [deckId])
+        } catch (error) {
+            console.log(error)
+        }
+    }, [deckId])
          
   
-         useEffect(() => {
-    async function getDeck() {
-        const currentDeck = await readDeck(deckId, abortController.signal);
-        setDeck(currentDeck);
-        setDeckName(currentDeck.name)  
+    useEffect(() => {
+        async function getDeck() {
+            try {
+                const currentDeck = await readDeck(deckId, abortController.signal);
+                setDeck(currentDeck);
+                setDeckName(currentDeck.name);  
+            } catch (error) {
+                console.log(error);
+            }
         } getDeck();
+          return () => abortController.abort();
     }, [displayDeckName]);
 
     useEffect(() => {
         async function getCardNameAndDescription() {
-            const currentCard = await readCard(cardId, abortController.signal);
+           try { const currentCard = await readCard(cardId, abortController.signal);
             setCard(currentCard);
             setFrontCardText(currentCard.front);
             setBackCardText(currentCard.back);
-        }getCardNameAndDescription();
+        } catch (error) {
+            console.log(error)
+          }
+      }
+        getCardNameAndDescription();
+        return () => abortController.abort();
     }, [])
 
 
@@ -128,12 +142,17 @@ function EditCard() {
           and "Deck.js" 'files' and a 'form' to 'update' the selected "card". */
     useEffect(() => {   
         if (card != {} && waitForCardToUpdate) {
+           try {
             updateCard(card, abortController.signal);
             setWaitForCardToUpdate(false);
             setFrontCardText("");
             setBackCardText("");
             navigate(`/decks/${deckId}`);
-        } else return;
+        } catch (error) {
+            console.log(error)
+        }
+        return () => abortController.abort();
+        }else return;
     }, [waitForCardToUpdate]);
 
     /* The "handleChange" 'function' that takes an 'object' 'parameter' named 
