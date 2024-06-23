@@ -4,12 +4,12 @@ import React, { useEffect, useState } from 'react';
 'react-router-dom'. */
 import { useParams, useNavigate } from 'react-router-dom';
 /* Imports the "createCard", "updateCard", and the "readCard" 'functions/components'
- from '../utils/api/index.js'. */
- import { readCard, updateCard, createCard } from '../utils/api/index';
+from '../utils/api/index.js'. */
+import { readCard, updateCard, createCard } from '../utils/api/index';
 
- /* The "AddEditCards" 'function/component' handles returns a 'form JSX element' for 
- the "src/cards/AddCard.js" and "src/cards/EditCard.js" 'files/components' and handles 
- both of their functionality. */
+/* The "AddEditCards" 'function/component' handles returns a 'form JSX element' for 
+the "src/cards/AddCard.js" and "src/cards/EditCard.js" 'files/components' and handles 
+both of their functionality. */
 function AddEditCards() {
   const {deckId, cardId} = useParams();
   /* The "card" 'variable' and the "setCard" 'function' are 'declared' using the 
