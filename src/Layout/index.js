@@ -63,12 +63,12 @@ function Layout() {
     } getDecks();
   }, [navigate] );
 
-/* The "handleDeleteDeck" has one parameter ("deckId") and displays a 
-'window.confirm' screen asking if the user want to delete the specified "deck". 
-If yes, then the 'async' 'function' "deleteAndUpdateDecks" is called which calls
- the "deleteAndUpdateDecks" 'function/component' with an optional 
- 'abortContoller.signal' as its 'argument', calls the "listDecks" 
- 'function/component' using 'await' which is stored in the "newListOfDecks" 
+  /* The "handleDeleteDeck" has one parameter ("deckId") and displays a 
+  'window.confirm' screen asking if the user want to delete the specified "deck". 
+  If yes, then the 'async' 'function' "deleteAndUpdateDecks" is called which calls
+  the "deleteAndUpdateDecks" 'function/component' with an optional 
+  'abortContoller.signal' as its 'argument', calls the "listDecks" 
+  'function/component' using 'await' which is stored in the "newListOfDecks" 
   'variable'. The "setDecksList" is finally called with the "newListOfDecks" 
   'variable' as its 'argument'. */
   function handleDeleteDeck(deckId) {
@@ -78,59 +78,58 @@ If yes, then the 'async' 'function' "deleteAndUpdateDecks" is called which calls
       deleteDeck(deckId, abortController.signal);
       const newListOfDecks = await listDecks(abortController.signal);
       setDecksList(newListOfDecks);
-  } deleteAndUpdateDecks();
-}
+      } deleteAndUpdateDecks();
+    }
   }
 
   /* This 'if statement' checks if the 'URL' is "/". If so, the "createDeckBtn" 
   'variable' will store a 'react-bootstrap' 'Button' 'element' that will load the
-   "CreateDeck" 'component'. The "decks" 'variable' will also hold all data from
-    every "deck" on the local server via JSX 'elements'. If the 'URL' 'path' is 
-     different, the "createDeckBtn" and the "CreateDeck" 'variable' will be given
-      the value 'null'. */
-if (location.pathname === "/") {
-  createDeckBtn = <button type="button"  className="create-deck-btn btn btn-secondary" onClick={() => navigate("/decks/new")} >
-    <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>
-    Create Deck</button>
-  decks = decksList.map((deck, index) => (
-    <div className="Layout-index-deck-div" key={index} >
-      <div className="Layout-index-header-card-count-div">
-        <h2 className="Layout-index-deck-title">{deck.name}</h2>
-        <h5 className="Layout-index-card-count-div">{deck.cards.length} cards</h5>
-      </div>
-      <p className="Layout-index-deck-description">{deck.description}</p>
-    <div className="Layout-index-btns-div">
-      <button type="button" className="Layout-index-view-deck-btn btn btn-secondary" onClick={() => navigate(`/decks/${deck.id}/*`)} >
-        <img width="20" height="20" src="https://img.icons8.com/external-creatype-glyph-colourcreatype/64/000000/external-app-web-application-v1-creatype-glyph-colourcreatype-52.png" alt="external-app-web-application-v1-creatype-glyph-colourcreatype-52" className="eye-img" />
+  "CreateDeck" 'component'. The "decks" 'variable' will also hold all data from
+  every "deck" on the local server via JSX 'elements'. If the 'URL' 'path' is 
+  different, the "createDeckBtn" and the "CreateDeck" 'variable' will be given
+  the value 'null'. */
+  if (location.pathname === "/") {
+    createDeckBtn = <button type="button"  className="create-deck-btn btn btn-secondary" onClick={() => navigate("/decks/new")} >
+      <img width="25" height="25" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" alt="plus-math"/>
+      Create Deck</button>
+    decks = decksList.map((deck, index) => (
+      <div className="Layout-index-deck-div" key={index} >
+        <div className="Layout-index-header-card-count-div">
+          <h2 className="Layout-index-deck-title">{deck.name}</h2>
+          <h5 className="Layout-index-card-count-div">{deck.cards.length} cards</h5>
+        </div>
+        <p className="Layout-index-deck-description">{deck.description}</p>
+        <div className="Layout-index-btns-div">
+          <button type="button" className="Layout-index-view-deck-btn btn btn-secondary" onClick={() => navigate(`/decks/${deck.id}/*`)} >
+            <img width="20" height="20" src="https://img.icons8.com/external-creatype-glyph-colourcreatype/64/000000/external-app-web-application-v1-creatype-glyph-colourcreatype-52.png" alt="external-app-web-application-v1-creatype-glyph-colourcreatype-52" className="eye-img" />
           View</button> 
-        <button type="button" className="Layout-index-study-deck-btn btn btn-primary" onClick={() => navigate(`/decks/${deck.id}/study`)} >
+          <button type="button" className="Layout-index-study-deck-btn btn btn-primary" onClick={() => navigate(`/decks/${deck.id}/study`)} >
             <img width="18" height="18" src="https://img.icons8.com/material-rounded/24/000000/bookmark.png" className="book-img" alt="bookmark"/>
-              Study</button>
+          Study</button>
           <button type="button" className="Layout-index-delete-deck-btn btn btn-danger" value={index} onClick={ () => handleDeleteDeck(deck.id)}>
             <img width="18" height="18" src="https://img.icons8.com/material-rounded/24/000000/trash.png" className="trashcan-img" alt="trash"/>
           </button>     
-  </div>
-</div>
-));
-} else {
-  createDeckBtn = null;
-  decks = null;
-}
-/* A 'div' JSX 'element' is returned with the "Header" 'component' inside. Also 
-inside is another 'div' JSX 'element' with the 'className' "container". Inside 
-are the "createDeckBtn" and "decks" 'variables' and a 'Routes' JSX 'components' 
-with the 'routes' to the "Study", "CreateDeck", "Deck", "EditDeck", "AddCard", 
-and the "EditCard" 'components' via 'Route' JSX 'elements'.*/
-
+        </div>
+      </div>
+    ));
+  } else {
+    createDeckBtn = null;
+    decks = null;
+  }
+  /* A 'div' JSX 'element' is returned with the "Header" 'component' inside. Also 
+  inside is another 'div' JSX 'element' with the 'className' "container". Inside 
+  are the "createDeckBtn" and "decks" 'variables' and a 'Routes' JSX 'components' 
+  with the 'routes' to the "Study", "CreateDeck", "Deck", "EditDeck", "AddCard", 
+  "AddEditCards",and the "EditCard" 'components' via 'Route' JSX 'elements'.*/
   return (
     <div>
       <Header />
       <div className="container">
         {/* TODO: Implement the screen starting here */}
-    {createDeckBtn}
-    {decks}
-          <Routes>
-            <Route path="/" element={Layout} /> 
+        { createDeckBtn }
+        { decks }
+        <Routes>
+          <Route path="/" element={Layout} /> 
             <Route path="/decks/new" element={<CreateDeck />} />
             <Route path="/decks/:deckId/*" element={<Deck />} />
             <Route path="/decks/:deckId/study/*" element={<Study />} />
