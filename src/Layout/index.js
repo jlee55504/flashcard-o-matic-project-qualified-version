@@ -30,13 +30,13 @@ import AddEditCards from '../cards//AddEditCards';
 
 /* The "Layout" 'function/component' diplays the "Header" 'component' and the 
 "Home.js", "Study.js", "CreateDeck.js", "Deck.js", "EditDeck.js", "AddCard.js", 
-and "EditCard.js" screens depending on the 'URL'. When the 'URL' is "/", the 
-"Home" page is displayed, which diplays a 'button' JSX 'element' with the 'text' 
-"Create Deck", all the "decks" on the local server along with the "view", "Study" 
-and a 'button' JSX 'element' to delete the specific "deck". */
+"AddEditCards", and "EditCard.js" screens depending on the 'URL'. When the 'URL' 
+is "/", the "Home" page is displayed, which diplays a 'button' JSX 'element' with
+the 'text' "Create Deck", all the "decks" on the local server along with the 
+"view", "Study" and a 'button' JSX 'element' to delete the specific "deck". */
 function Layout() {
   /* The "decksList" 'variable' holds the current "decks" on the local server 
-  using the 'useState' 'component' which is first set to an empty array ([]). 
+  using the 'useState' 'component' which is first set to an empty array ('[]'). 
   The "setDecksList" 'sets' the "decksList" 'variable'. */
   const [decksList, setDecksList] = useState([]);
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
