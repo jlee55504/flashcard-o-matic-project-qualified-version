@@ -16,21 +16,21 @@ function AddCard() {
   const { deckId } = useParams();
   /* The "deckName" 'variable' and the "setDeckName" 'function' are 'declared' 
   using the 'useState' (which is set to an empty 'string' ("")). */
-  const [deckName, setDeckName] = useState("");
+  const [ deckName, setDeckName ] = useState( "" );
   /* The "abortcontroller" holds a 'new AbortController' 'method'. */
   const abortController = new AbortController();
 
   useEffect(() => {    
     async function getDeck() {
         try {
-          const selectedDeck = await readDeck(deckId, abortController.signal);
-          setDeckName(selectedDeck.name);
-        } catch (error) { 
-            console.error(error); 
+          const selectedDeck = await readDeck( deckId, abortController.signal );
+          setDeckName( selectedDeck.name );
+        } catch ( error ) { 
+            console.error( error ); 
           } 
     } getDeck();
       return () => abortController.abort(); 
-  }, [deckName]);
+  }, [ deckName ]);
 
   /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
   contains a 'Link' JSX 'component' (which brings users to the "Home page") with
@@ -45,11 +45,11 @@ function AddCard() {
     <div>
       <div className='nav-bar'><Link to="/" className='home-link' >
         <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png"
-        alt="home" className='home-icon'/>Home </Link> / <Link to={`/decks/${deckId}`}> {deckName}</Link> / Add Card</div>
-        <h2 className='AddCard-deck-name-h2'> {deckName}: </h2><h2 className='AddCard-add-card-h2'> Add Card</h2>
-        <Routes>
-          <Route path="/new/*" element={<AddEditCards />} />
-        </Routes>
+        alt="home" className='home-icon'/>Home </Link> / <Link to={`/decks/${ deckId }`}> { deckName }</Link> / Add Card</div>
+      <h2 className='AddCard-deck-name-h2'> { deckName }: </h2><h2 className='AddCard-add-card-h2'> Add Card</h2>
+      <Routes>
+        <Route path="/new/*" element={<AddEditCards />} />
+      </Routes>
     </div>
   );
 }
