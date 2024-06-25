@@ -40,22 +40,24 @@ function Deck() {
       try {
         setLoadDeckInfo( true );
       } catch ( error ) {
-            console.log( error );
+          console.log( error );
         }
     } loadTheDeckInfo();
-        return () => abortController.abort();
+      return () => abortController.abort();
   }, [ deckId ] )
 
-  /* This 'useEffect' 'component' runs every time the "deckId" and 
-  "updateCardList" 'variables' change using the 'async function' "getDeck" which
-  calls the "readDeck" 'function/component' using 'await' with the "deckId" 
-  'variable'and "abortController.signal" as its arguments (which is stored in 
-  the "seleckedDeck" 'variable'). The "deck" 'variable' is then 'set' with 
+  /* This 'useEffect' 'component' runs every time the "loadDeckInfo" and 
+  "updateCardList" 'variables' change using the 'async function' "getDeck" 
+  which uses a 'try/catch statement' and calls the "readDeck" 
+  'function/component' using 'await' with the "deckId" 'variable' and 
+  "abortController.signal" as its arguments (which is stored in the 
+  "seleckedDeck" 'variable'). The "deck" 'variable' is then 'set' with 
   data retrieved from the "selectedDeck" 'variable' with the "setDeck" 
   'function' and the "deckCards" 'variable' is set with the "cards" 'key'
   from the "selectedDeck" 'variable's' "cards" 'key' using the "setDeckCards" 
   'function'. If the "updateCardList" 'variable's' 'value' is 'truthy', the 
-  "setUpdateCardList" 'function' sets it to 'false'. */
+  "setUpdateCardList" 'function' sets it to 'false'. Finally, an 
+  'abortController.abort method' is 'returned'. */
   useEffect(() => {
     async function getDeck() {
       try {
@@ -70,34 +72,51 @@ function Deck() {
       return ()=> abortController.abort();
   }, [ loadDeckInfo, updateCardList ]);
 
-  /* The 'async function' "handleDeleteCard" takes a 'parameter' named "cardId"
+  /* The "handleDeleteCard" 'function' takes a 'parameter' named "cardId"
   and 'window.confirm' screen displays 'text' confirming wanting to delete a 
   specific "card" (which is stored in the "confirm" 'variable'). If the 
-  "confirm" 'variable' 'value' is 'true', the "deleteCard" 'function/component'
-  is 'called' using 'await' with the "cardId" 'parameter' and 
-  "abortController.signal" as 'arguments', then the "setUpdateCardList" 
-  'function' is 'called' with 'true' as its 'argument'. */
-  async function handleDeleteCard( cardId ) {
+  "confirm" 'variable' 'value' is 'true', the "deleteThecard" 'async function' 
+  is run using a 'try/catch statement' is run and the "deleteCard" 
+  'function/component' is 'called' using 'await' with the "cardId" 'parameter' 
+  and "abortController.signal" as 'arguments', then the "setUpdateCardList" 
+  'function' is 'called' with 'true' as its 'argument'. Finally, an 
+  'abortController.abort method' is 'returned'. */
+  const handleDeleteCard = ( cardId ) => {
     const confirm = window.confirm("Delete this card? \n You will not be able to recover it.");
     if ( confirm === true) {
-      await deleteCard( cardId, abortController.signal );   
-      setUpdateCardList( true );
+      async function deleteTheCard() {
+        try {
+          await deleteCard( cardId, abortController.signal );   
+          setUpdateCardList( true );
+        } catch ( error ) {
+            console.log( error );
+          }
+      } deleteTheCard();
+        return ()=> abortController.abort();
     }
   }
 
-  /* The 'async function' "handleDeleteDeck" takes a 'parameter' named "deckId"
+  /* The "handleDeleteDeck" 'function' takes a 'parameter' named "deckId"
   and 'window.confirm' screen displays 'text' confirming wanting to delete a 
   specific "deck" (which is stored in the "confirm" 'variable'). If the 
-  "confirm" 'variable' value is 'true', the "deleteDeck" 'function/component' 
-  is 'called' using 'await' with the "deckId" 'parameter' and 
-  "abortController.signal" as 'arguments', then the "navigate" 
+  "confirm" 'variable' value is 'true', the "deleteTheDeck" 'async function' 
+  is run using a 'try/catch statement' is run and the "deleteDeck" 
+  'function/component' is 'called' using 'await' with the "deckId" 'parameter' 
+  and "abortController.signal" as 'arguments', then the "navigate" 
   ('useNavigate' 'component') is called with "/" (the "Home page") as its 
-  argument. */
-  async function handleDeleteDeck( deckId ) {
+  argument. Finally, an 'abortController.abort method' is 'returned'. */
+  const handleDeleteDeck = ( deckId ) => {
       const confirm = window.confirm("Delete this deck? \n You will not be able to recover it.");
         if ( confirm === true ) {
-          await deleteDeck( deckId, abortController.signal ); 
-          navigate("/");
+            async function deleteTheDeck() {
+            try {
+              await deleteDeck( deckId, abortController.signal ); 
+              navigate("/");
+            } catch (error) {
+                console.log(error)
+            }
+        } deleteTheDeck();
+        return ()=> abortController.abort();
         }
   }
 
