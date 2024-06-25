@@ -61,7 +61,6 @@ function Study() {
           console.log( error )
         }
     } loadTheDeckInfo();
-      return () => abortController.abort();
   }, [ deckId ])
 
   /* This 'useEffect' 'component' runs only once when the web page first 
@@ -104,7 +103,13 @@ function Study() {
   useEffect(() => {
     if ( deckCards.length === 0 ) return;
     else if( deckCards.length > 0 && currentCardIndex === 0 ) {
-      setCurrentCardText( deckCards[0].front );
+      async function setCardText() {
+        try {
+          setCurrentCardText( deckCards[0].front );
+        } catch ( error ) {
+          console.log( error );
+          }
+      } setCardText();
     }
   }, [ deckCards, currentCardIndex ]);
 
