@@ -21,34 +21,34 @@ function EditCard() {
   const { deckId, cardId } = useParams();
   /* The "deck" 'variable' and the "setDeck" 'function' are declared 
   using the 'useState' 'component' with an empty 'array' ('[]') as its argument. */
-  const [ deck, setDeck ] = useState([]);
+  const [ deck, setDeck ] = useState( [] );
   /* The "abortcontroller" holds a 'new AbortController' 'method'. */
   const abortController = new AbortController();
   
-  const [ waitforDeckHeader, setWaitForDeckHeader ] = useState(false);
+  const [ waitforDeckHeader, setWaitForDeckHeader ] = useState( false );
  
   useEffect(() => {
     async function updateDeckHeader() {
-        try{
-          setWaitForDeckHeader(true);
-        } catch (error) {
-            console.log(error)
-          } 
-    } updateDeckHeader()
+      try {
+        setWaitForDeckHeader( true );
+      } catch ( error ) {
+          console.log( error )
+        } 
+    } updateDeckHeader();
       return abortController.abort();
-  },[deckId])
+  },[ deckId ])
 
   useEffect(() => { 
     async function getDeck() {
-        try { 
-          const currentDeck = await readDeck(deckId, abortController.signal);
-          setDeck(currentDeck);
-        } catch (error) { 
-            console.error(error); 
-          } 
+      try { 
+        const currentDeck = await readDeck( deckId, abortController.signal );
+        setDeck( currentDeck );
+      } catch ( error ) { 
+          console.error( error ); 
+        } 
     } getDeck(); 
       return () => abortController.abort();
-  }, [waitforDeckHeader]);
+  }, [ waitforDeckHeader ]);
 
   /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
   contains a 'Link' JSX 'component' (which brings users to the "Home page") with
@@ -64,7 +64,7 @@ function EditCard() {
       <div className='nav-bar'><Link to="/" className='home-link' >
       <img width="24" height="24" src="https://img.icons8.com/material-rounded/24/000000/home.png" 
       alt="home" className='home-icon'/>
-      Home</Link> / <Link to={`/decks/${deckId}`}>Deck {deck.name}</Link> / Edit Card {cardId}</div>
+      Home</Link> / <Link to={`/decks/${ deckId }`}>Deck { deck.name }</Link> / Edit Card { cardId }</div>
       <h1>Edit Card</h1>
       <Routes>
         <Route path="/edit/*" element={<AddEditCards />} />
