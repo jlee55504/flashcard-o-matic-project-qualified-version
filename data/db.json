@@ -11,8 +11,8 @@
       "id": 2
     },
     {
-      "name": "New card deck",
-      "description": "This is a new card deck",
+      "name": "New Deck",
+      "description": "This is a new deck.",
       "id": 3
     }
   ],
@@ -79,28 +79,28 @@
       "deckId": 2
     },
     {
-      "front": "Can I add a new card to this new card deck?",
-      "back": "yes.",
-      "deckId": 3,
-      "id": 14
-    },
-    {
       "id": 17,
       "front": "What did the egg say to the frying pan?",
       "back": "You crack me up!",
       "deckId": 1
     },
     {
-      "id": 18,
-      "front": "A??",
-      "back": "B!!!!",
-      "deckId": 1
+      "front": "Did I just add a new card?",
+      "back": "Yes.",
+      "deckId": 3,
+      "id": 18
     },
     {
-      "front": "What?",
-      "back": "No!",
-      "deckId": 1,
-      "id": 19
+      "front": "Do I have to add another card?",
+      "back": "Yes.",
+      "deckId": 3,
+      "id": 21
+    },
+    {
+      "front": "Do I need to add this card to the deck?",
+      "back": "Yes.",
+      "deckId": 3,
+      "id": 23
     }
   ]
 }
