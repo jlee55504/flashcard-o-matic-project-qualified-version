@@ -11,19 +11,19 @@ import { readCard, updateCard, createCard } from '../utils/api/index';
 the "src/cards/AddCard.js" and "src/cards/EditCard.js" 'files/components' and handles 
 both of their functionality. */
 function AddEditCards() {
-  const {deckId, cardId} = useParams();
+  const { deckId, cardId } = useParams();
   /* The "card" 'variable' and the "setCard" 'function' are 'declared' using the 
   'useState' (which is set to an empty 'string' ("")). */
-  const [card, setCard] = useState([]);
+  const [ card, setCard ] = useState( [] );
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
-  const [frontCardText, setFrontCardText] = useState("");
+  const [ frontCardText, setFrontCardText ] = useState( "" );
   /* The "backCardText" 'variable' and the "setBackCardText" 'function' are 
   'declared' using the 'useState' (which is set to an empty 'string' ("")). */
-  const [backCardText, setBackCardText] = useState("");
+  const [ backCardText, setBackCardText ] = useState( "" );
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */
   const navigate = useNavigate();
 
-  const [waitToAddCard, setWaitToAddCard] = useState(false);
+  const [ waitToAddCard, setWaitToAddCard ] = useState( false );
   /* The "abortcontroller" holds a 'new AbortController' 'method'. */
   const abortController = new AbortController();
 
@@ -31,79 +31,80 @@ function AddEditCards() {
 
   /* The "waitForCardToUpdate" 'variable' and the "setWaitForCardToUpdate" 
   'function' are 'declared' using the 'useState' (which is set to 'false'). */
-  const [waitForCardToUpdate, setWaitForCardToUpdate] = useState(false); 
+  const [ waitForCardToUpdate, setWaitForCardToUpdate ] = useState( false ); 
   
   useEffect(() => { 
-    if (cardId) {  
+    if ( cardId ) {  
       async function displayEditCardText() {
         try { 
-          setUpdateEditCardText(true)
-        } catch (error) { 
-            console.error(error); 
+          setUpdateEditCardText( true )
+        } catch ( error ) { 
+            console.error( error ); 
           } 
       } displayEditCardText();
         return () => abortController.abort();
     } else return;
-  }, [deckId]);
+  }, [ deckId ]);
 
   useEffect(() => { 
-    if (cardId) {   
+    if ( cardId ) {   
       async function getCard() { 
-          try { 
-            const currentCard = await readCard(cardId, abortController.signal);
-            setCard(currentCard); 
-            setFrontCardText(currentCard.front);
-            setBackCardText(currentCard.back);
-          } catch (error) { 
-              console.error(error); 
-            } 
+        try { 
+          const currentCard = await readCard( cardId, abortController.signal );
+          setCard( currentCard ); 
+          setFrontCardText( currentCard.front );
+          setBackCardText( currentCard.back );
+        } catch ( error ) { 
+              console.error( error ); 
+          } 
       } getCard(); 
         return () => abortController.abort();
     } else return;
-  }, [updateEditCardText]);
+  }, [ updateEditCardText ]);
 
   useEffect(() => {  
-    if (waitToAddCard && !cardId) { 
+    if ( waitToAddCard && !cardId ) { 
       async function createCardData() { 
         try { 
-          await createCard(deckId, {front: frontCardText, back: backCardText}, abortController.signal);
-          setFrontCardText("");
-          setBackCardText("");
-        } catch (error) { 
-            console.error(error); 
-                 }
+          await createCard( deckId, { front: frontCardText, back: backCardText, }, abortController.signal );
+          setFrontCardText( "" );
+          setBackCardText( "" );
+          setWaitToAddCard( false );
+        } catch ( error ) { 
+            console.error( error ); 
+          }
       } createCardData(); 
     } return () => abortController.abort();
-  }, [waitToAddCard]);
+  }, [ waitToAddCard ]);
 
   useEffect(() => { 
-    if (waitForCardToUpdate && cardId) {  
+    if ( waitForCardToUpdate && cardId ) {  
       async function updateCardData() { 
         try { 
-          await updateCard(card, abortController.signal);
-          setWaitForCardToUpdate(false);
-          setFrontCardText("");
-          setBackCardText("");
-          navigate(`/decks/${deckId}`);
-        } catch (error) { 
-            console.error(error); 
+          await updateCard( card, abortController.signal );
+          setWaitForCardToUpdate( false );
+          setFrontCardText( "" );
+          setBackCardText( "" );
+          navigate(`/decks/${ deckId }`);
+        } catch ( error ) { 
+            console.error( error ); 
           }
       } updateCardData(); 
     } return () => abortController.abort();
-  }, [waitForCardToUpdate, navigate, card, deckId]);
+  }, [ waitForCardToUpdate, navigate, card, deckId ]);
 
   /* The "handleChange" 'function' takes an 'object' 'parameter' named 
   "target" and checks if the "cardId" 'variable's' 'value' is 'truthy'. 
   If so, the functionality used to handle the "src/cards/EditCard.js" 
   'file/component' runs. Otherwise, the code used to handle the 
   "src/cards/AddCard.js" 'file's/component's' functionality is run. */
-  const handleChange = ({ target }) => {
-    if(cardId) {
-      if (target.name === "EditCard-front-text") setFrontCardText(target.value);
-      else if (target.name === "EditCard-back-text") setBackCardText(target.value);
+  const handleChange = ( { target } ) => {
+    if( cardId ) {
+      if ( target.name === "EditCard-front-text" ) setFrontCardText( target.value );
+      else if ( target.name === "EditCard-back-text" ) setBackCardText( target.value );
     } else {
-        if (target.name === "AddCard-front-text") setFrontCardText(target.value);
-        else if (target.name === "AddCard-back-text") setBackCardText(target.value);
+        if ( target.name === "AddCard-front-text" ) setFrontCardText( target.value );
+        else if ( target.name === "AddCard-back-text" ) setBackCardText( target.value );
       }
   }
   /* The "handleSubmit" 'function' takes a 'parameter' named "event". The 
@@ -114,32 +115,37 @@ function AddEditCards() {
   'file's/component's' functionality is run. */
   const handleSubmit = event => { 
     event.preventDefault();
-    if (cardId) {
-      setCard({ id: Number(card.id), front: frontCardText, back: backCardText, 
-      deckId: Number(card.deckId), 
+    if ( cardId ) {
+      setCard( { id: Number( card.id ), front: frontCardText, back: backCardText, 
+      deckId: Number( card.deckId ), 
       }); 
-    setWaitForCardToUpdate(true);
-    } else setWaitToAddCard(true); 
+      setWaitForCardToUpdate( true );
+    } else setWaitToAddCard( true ); 
   };
 
   /* A 'form JSX element' is returned with 'attribute values' based on the 
   'value' of the "cardId" 'variable'. */
   return (
-    <form onSubmit={handleSubmit}>
-      <label htmlFor={cardId ? "EditCard-front-text" : 'AddCard-front-text'} className={cardId ? 'EditCard-front-text-label' : ""} >
+    <form onSubmit={ handleSubmit }>
+      <label htmlFor={ cardId ? "EditCard-front-text" : 'AddCard-front-text' } className={ cardId ? 
+        'EditCard-front-text-label' : ""} >
         Front
-          <textarea id={cardId ? "EditCard-front-text" : "AddCard-front-text"} 
-          name={cardId ? "EditCard-front-text" : "AddCard-front-text" }
-          placeholder={cardId ? card.front : 'Front side of card'}
-          onChange={handleChange} value={frontCardText} required ></textarea>
+        <textarea id={ cardId ? "EditCard-front-text" : "AddCard-front-text" } 
+          name={ cardId ? "EditCard-front-text" : "AddCard-front-text" }
+          placeholder={ cardId ? card.front : 'Front side of card' }
+          onChange={ handleChange } value={ frontCardText } required ></textarea>
       </label>
-      <label htmlFor={cardId ? "EditCard-back-text" : 'AddCard-back-text'} >Back
-        <textarea id={cardId ? "EditCard-back-text" : "AddCard-back-text"} name={cardId ? "EditCard-back-text" : "AddCard-back-text"}
-        placeholder={cardId ? card.front : 'Back side of card'} 
-        onChange={handleChange} value={backCardText} required />
+      <label htmlFor={ cardId ? "EditCard-back-text" : 'AddCard-back-text' } >
+        Back
+        <textarea id={ cardId ? "EditCard-back-text" : "AddCard-back-text" } 
+        name={ cardId ? "EditCard-back-text" : "AddCard-back-text" }
+        placeholder={ cardId ? card.front : 'Back side of card' } 
+        onChange={ handleChange } value={ backCardText } required />
       </label>
-      <button type="button" className={cardId ? "EditCard-cancel-btn btn btn-secondary" : 'AddCard-done-btn btn btn-secondary' } onClick={() => navigate(`/decks/${deckId}`)} >Cancel</button>
-      <button type="submit" className={cardId ? "EditCard-submit-btn btn btn-primary" : 'AddCard-submit-btn btn btn-primary'} >Submit</button>
+      <button type="button" className={ cardId ? "EditCard-cancel-btn btn btn-secondary" : 
+        'AddCard-done-btn btn btn-secondary' } onClick={ () => navigate(`/decks/${ deckId }`) } >Cancel</button>
+      <button type="submit" className={ cardId ? "EditCard-submit-btn btn btn-primary" : 
+        'AddCard-submit-btn btn btn-primary' } >Submit</button>
     </form>
   );
  }
