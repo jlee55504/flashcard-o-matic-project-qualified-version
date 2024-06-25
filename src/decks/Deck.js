@@ -33,6 +33,18 @@ function Deck() {
   const navigate = useNavigate();
   /* The "abortcontroller" holds a 'new AbortController' 'method'. */
   const abortController = new AbortController();
+  const [loadDeckInfo, setLoadDeckInfo] = useState( false );
+
+  useEffect(() => {
+    async function loadTheDeckInfo() {
+      try {
+        setLoadDeckInfo( true );
+      } catch ( error ) {
+            console.log( error );
+        }
+    } loadTheDeckInfo();
+        return () => abortController.abort();
+  }, [ deckId ] )
 
   /* This 'useEffect' 'component' runs every time the "deckId" and 
   "updateCardList" 'variables' change using the 'async function' "getDeck" which
@@ -46,12 +58,17 @@ function Deck() {
   "setUpdateCardList" 'function' sets it to 'false'. */
   useEffect(() => {
     async function getDeck() {
-      const selectedDeck = await readDeck( deckId, abortController.signal );
-      setDeck( selectedDeck );
-      setDeckCards( selectedDeck.cards );
-      if( updateCardList ) setUpdateCardList( false );
+      try {
+        const selectedDeck = await readDeck( deckId, abortController.signal );
+        setDeck( selectedDeck );
+        setDeckCards( selectedDeck.cards );
+        if( updateCardList ) setUpdateCardList( false );
+      } catch ( error ) {
+          console.log( error );
+        }
     } getDeck();
-  }, [ deckId, updateCardList ]);
+      return ()=> abortController.abort();
+  }, [ loadDeckInfo, updateCardList ]);
 
   /* The 'async function' "handleDeleteCard" takes a 'parameter' named "cardId"
   and 'window.confirm' screen displays 'text' confirming wanting to delete a 
@@ -130,19 +147,19 @@ function Deck() {
         <p>{ deck.description }</p>
         <div className="Deck-select-deck-btns-div">
           <button type="button" className="Deck-edit-deck-btn btn btn-secondary"
-           onClick={ ()=> navigate(`/decks/${deckId}/edit`) } >
+           onClick={ ()=> navigate(`/decks/${ deckId }/edit`) } >
             <img width="16" height="16" src="https://img.icons8.com/material-sharp/24/000000/edit--v1.png" 
             alt="edit--v1"/>
               Edit
           </button>
           <button type="button" className="Deck-study-deck-btn btn btn-primary" 
-          onClick={ ()=> navigate(`/decks/${deckId}/study`) } >
+          onClick={ ()=> navigate(`/decks/${ deckId }/study`) } >
             <img width="17" height="17" src="https://img.icons8.com/material-rounded/24/000000/bookmark.png" 
             alt="bookmark" className="book-img" />
               Study
           </button>
           <button type="button" className="Deck-add-cards-to-deck-btn btn btn-primary" 
-          onClick={ ()=> navigate(`/decks/${deckId}/cards/new`) } >
+          onClick={ ()=> navigate(`/decks/${ deckId }/cards/new`) } >
             <img width="21" height="21" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" 
             alt="plus-math"/>
               Add Cards
@@ -164,7 +181,7 @@ function Deck() {
             <p className="Deck-card-div-back-p" >{ card.back }</p>
             <div className="Deck-card-div-btns-div" >
               <button type="button" className="Deck-edit-card-btn btn btn-secondary" 
-              onClick={ ()=> navigate(`/decks/${deckId}/cards/${card.id}/edit`) } >
+              onClick={ ()=> navigate(`/decks/${ deckId }/cards/${ card.id }/edit`) } >
                 <img width="16" height="16" src="https://img.icons8.com/material-sharp/24/000000/edit--v1.png" 
                 alt="edit--v1"/>
                   Edit
