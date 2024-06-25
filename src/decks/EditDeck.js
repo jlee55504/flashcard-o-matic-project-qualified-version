@@ -28,7 +28,7 @@ function EditDeck() {
   /* The "waitForDeckToUpdate" 'variable' and the "setWaitForDeckToUpdate" 
   'function' are 'declared' using the 'useState' (which is set to 'false'). */
   const [waitForDeckToUpdate, setWaitForDeckToUpdate] = useState( false );
-  const [loadDeckInfo, setLoadDeckInfo] = useState( false );
+  const [ loadDeckInfo, setLoadDeckInfo ] = useState( false );
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */ 
   const navigate = useNavigate();
   /* The "abortController" 'variable' holds a 'new' 'AbortController' 'method'. */
