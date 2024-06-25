@@ -28,20 +28,21 @@ function EditDeck() {
   /* The "waitForDeckToUpdate" 'variable' and the "setWaitForDeckToUpdate" 
   'function' are 'declared' using the 'useState' (which is set to 'false'). */
   const [waitForDeckToUpdate, setWaitForDeckToUpdate] = useState( false );
-  const [loadDeckInfo, setLoadDeckInfo] = useState( false )
+  const [loadDeckInfo, setLoadDeckInfo] = useState( false );
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */ 
   const navigate = useNavigate();
   /* The "abortController" 'variable' holds a 'new' 'AbortController' 'method'. */
   const abortController = new AbortController();
  
   useEffect(() => {
-    async function loadTheDeckInfo () {
+    async function loadTheDeckInfo() {
       try {
         setLoadDeckInfo(true);
       } catch (error) {
             console.log(error)
         }
-    } loadTheDeckInfo ()
+    } loadTheDeckInfo();
+    return () => abortController.abort();
   }, [ deckId ])
 
   useEffect(() => { 
@@ -52,18 +53,20 @@ function EditDeck() {
         setDeckName( currentDeck.name );
         setDeckDescription( currentDeck.description );
       } catch ( error ) {
-            console.log( error )
+            console.log( error );
         }
     } getDeck();
-     return () => abortController.abort()
+     return () => abortController.abort();
     }, [ loadDeckInfo ]);
 
   /* When the "waitForDeckToUpdate" 'variable' changes, a 'useEffect' 
   'component' runs checking if the "deck" 'variable' if 'falsey'. If so, 
   'return' is returned. If "waitForDeckToUpdate" is 'true'and the "deck" 
-  'variable' is not an empty 'object', the "updateDeck" 'function' is called 
-  with the "deck" 'variable' and "abortController.signal" as its 'arguments' 
-  and 'sets' the "waitForDeckToUpdate" 'variable' to 'false'. */
+  'variable' is not an empty 'object', the "updateTheDeck" 'async function'
+   is using a 'try/catch statement' and the "updateDeck" 'function' is 
+   called with the "deck" 'variable' and "abortController.signal" as its 
+   'arguments' and 'sets' the "waitForDeckToUpdate" 'variable' to 'false'. 
+   Finally, an 'abortController.abort method' is 'returned'. */
   useEffect(() => {
     if ( !waitForDeckToUpdate ) return;
     else if (waitForDeckToUpdate === true && deck != {}) {
