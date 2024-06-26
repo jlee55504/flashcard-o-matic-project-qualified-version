@@ -18,16 +18,16 @@ function EditDeck() {
   const { deckId } = useParams();
   /* The "deck"'variable' and the "setDeck" 'function' are 'declared' using the
   'useState' (which is set to an empty 'object' ('{}'). */
-  const [deck, setDeck] = useState( {} );
+  const [ deck, setDeck ] = useState( {} );
   /* The "deckName" 'variable' and the "setDeckName" 'function' are 'declared' 
   using the 'useState' (which is set to an empty 'string' ("")). */
-  const [deckName, setDeckName] = useState( "" );
+  const [ deckName, setDeckName ] = useState( "" );
   /* The "deckDescription" 'variable' and the "setDeckDescription" 'function' 
   are 'declared' using the 'useState' (which is set to an empty 'string' (""). */
-  const [deckDescription, setDeckDescription] = useState( "" );
+  const [ deckDescription, setDeckDescription ] = useState( "" );
   /* The "waitForDeckToUpdate" 'variable' and the "setWaitForDeckToUpdate" 
   'function' are 'declared' using the 'useState' (which is set to 'false'). */
-  const [waitForDeckToUpdate, setWaitForDeckToUpdate] = useState( false );
+  const [ waitForDeckToUpdate, setWaitForDeckToUpdate ] = useState( false );
   const [ loadDeckInfo, setLoadDeckInfo ] = useState( false );
   /* The "navigate" 'variable' holds the 'useNavigate' 'component'. */ 
   const navigate = useNavigate();
@@ -37,12 +37,12 @@ function EditDeck() {
   useEffect(() => {
     async function loadTheDeckInfo() {
       try {
-        setLoadDeckInfo(true);
-      } catch (error) {
-            console.log(error)
+        setLoadDeckInfo( true );
+      } catch ( error ) {
+            console.log( error );
         }
     } loadTheDeckInfo();
-    return () => abortController.abort();
+      return () => abortController.abort();
   }, [ deckId ])
 
   useEffect(() => { 
@@ -69,13 +69,13 @@ function EditDeck() {
    Finally, an 'abortController.abort method' is 'returned'. */
   useEffect(() => {
     if ( !waitForDeckToUpdate ) return;
-    else if (waitForDeckToUpdate === true && deck != {}) {
+    else if ( waitForDeckToUpdate === true && deck != {} ) {
       async function updateTheDeck() {
         try { 
           await updateDeck( deck, abortController.signal );
           setWaitForDeckToUpdate( false );
         } catch ( error ) {
-            console.log( error )
+            console.log( error );
           }
       } updateTheDeck();
     } return ()=> abortController.abort();
