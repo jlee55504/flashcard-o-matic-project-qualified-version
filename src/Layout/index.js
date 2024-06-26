@@ -58,7 +58,7 @@ function Layout() {
       try {
         setLoadDeckInfo( true );
       } catch ( error ) {
-          console.log( error )
+          console.log( error );
         }
     } loadTheDeckInfo();
       return () => abortController.abort();
