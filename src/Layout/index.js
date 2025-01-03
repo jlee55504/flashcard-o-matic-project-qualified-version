@@ -6,7 +6,7 @@ import Header from "./Header";
 import NotFound from "./NotFound";
 /* Imports the 'Routes', 'Route', 'useNavigate', and the 'useLocation' 
 'components' from 'react-router-dom'. */
-import { Routes, Route, useNavigate, useLocation, Link } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
 /* Imports the "classNames" from '../utils/class-names/index.js'. */
 import { classNames } from '../utils/class-names/index';
 /* Imports the "CreateDeck" 'component' from '../decks/CreateDeck.js'. */

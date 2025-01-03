@@ -69,7 +69,7 @@ function Deck() {
           console.log( error );
         }
     } getDeck();
-      return ()=> abortController.abort();
+      return () => abortController.abort();
   }, [ loadDeckInfo, updateCardList ]);
 
   /* The "handleDeleteCard" 'function' takes a 'parameter' named "cardId"
@@ -92,7 +92,7 @@ function Deck() {
             console.log( error );
           }
       } deleteTheCard();
-        return ()=> abortController.abort();
+        return () => abortController.abort();
     }
   }
 
@@ -116,7 +116,7 @@ function Deck() {
                 console.log(error)
             }
         } deleteTheDeck();
-        return ()=> abortController.abort();
+        return () => abortController.abort();
         }
   }
 
@@ -126,7 +126,7 @@ function Deck() {
   " / ", then the "deck" 'variable's' "name" 'key' 'value' in 'text'. After 
   that, another 'div' JSX 'element' follows displaying the "deck" 'variable's' 
   "name" 'key' 'value', the "deck" 'variable's' "decription" 'key' 'value', and
-  four 'button' JSX 'elements (all with 'img' JSX 'elements' inside). The 
+  four 'button' JSX 'elements' (all with 'img' JSX 'elements' inside). The 
   first displays the 'text' "Edit" with an 'onClick' 'attribute' with the 
   "navigate" 'variable' as its value with the 'text', "/decks/" plus the 
   'value' of the "deckId" 'variable', plus "/edit" as its argument. This 
@@ -166,19 +166,19 @@ function Deck() {
         <p>{ deck.description }</p>
         <div className="Deck-select-deck-btns-div">
           <button type="button" className="Deck-edit-deck-btn btn btn-secondary"
-           onClick={ ()=> navigate(`/decks/${ deckId }/edit`) } >
+           onClick={ () => navigate(`/decks/${ deckId }/edit`) } >
             <img width="16" height="16" src="https://img.icons8.com/material-sharp/24/000000/edit--v1.png" 
             alt="edit--v1"/>
               Edit
           </button>
           <button type="button" className="Deck-study-deck-btn btn btn-primary" 
-          onClick={ ()=> navigate(`/decks/${ deckId }/study`) } >
+          onClick={ () => navigate(`/decks/${ deckId }/study`) } >
             <img width="17" height="17" src="https://img.icons8.com/material-rounded/24/000000/bookmark.png" 
             alt="bookmark" className="book-img" />
               Study
           </button>
           <button type="button" className="Deck-add-cards-to-deck-btn btn btn-primary" 
-          onClick={ ()=> navigate(`/decks/${ deckId }/cards/new`) } >
+          onClick={ () => navigate(`/decks/${ deckId }/cards/new`) } >
             <img width="21" height="21" src="https://img.icons8.com/ios-filled/50/000000/plus-math.png" 
             alt="plus-math"/>
               Add Cards
@@ -200,7 +200,7 @@ function Deck() {
             <p className="Deck-card-div-back-p" >{ card.back }</p>
             <div className="Deck-card-div-btns-div" >
               <button type="button" className="Deck-edit-card-btn btn btn-secondary" 
-              onClick={ ()=> navigate(`/decks/${ deckId }/cards/${ card.id }/edit`) } >
+              onClick={ () => navigate(`/decks/${ deckId }/cards/${ card.id }/edit`) } >
                 <img width="16" height="16" src="https://img.icons8.com/material-sharp/24/000000/edit--v1.png" 
                 alt="edit--v1"/>
                   Edit
@@ -215,7 +215,7 @@ function Deck() {
         </div>
       )) : <></>}
     </div>
-    );
+  );
 }
 
 /* Exports the "Deck" 'function/component'. */

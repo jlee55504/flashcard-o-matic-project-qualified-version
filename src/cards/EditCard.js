@@ -67,10 +67,10 @@ function EditCard() {
       Home</Link> / <Link to={`/decks/${ deckId }`}>Deck { deck.name }</Link> / Edit Card { cardId }</div>
       <h1>Edit Card</h1>
       <Routes>
-        <Route path="/edit/*" element={<AddEditCards />} />
+        <Route path="/edit/*" element={ <AddEditCards /> } />
       </Routes>
     </div>
-    );
+  );
 }
 
 /* Exports the "EditCard" 'function/component'. */

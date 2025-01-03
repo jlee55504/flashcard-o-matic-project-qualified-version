@@ -78,7 +78,7 @@ function EditDeck() {
             console.log( error );
           }
       } updateTheDeck();
-    } return ()=> abortController.abort();
+    } return () => abortController.abort();
   }, [ waitForDeckToUpdate ] ); 
     
   /* The "handleChange" 'function' uses a "target" 'object' 'parameter' and
@@ -142,7 +142,7 @@ function EditDeck() {
           onChange={ handleChange } required value={ deckDescription } >
           </textarea>
           <button type="button" 
-          className="EditDeck-cancel-btn btn btn-secondary" onClick={ ()=> navigate(`/decks/${ deckId }`) } >
+          className="EditDeck-cancel-btn btn btn-secondary" onClick={ () => navigate(`/decks/${ deckId }`) } >
             Cancel
           </button>
           <button type="submit" variant="primary" 

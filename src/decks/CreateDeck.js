@@ -58,7 +58,7 @@ function CreateDeck() {
           console.log( error );
         }
     } createNewDeck();
-      return ()=> abortController.abort();
+      return () => abortController.abort();
   }
     
   /* A 'div' JSX 'element' is 'returned' with the "nav-bar" 'div' inside which 
@@ -91,7 +91,7 @@ function CreateDeck() {
           Description
           <textarea id="CreateDeck-description" name="CreateDeck-description" 
           placeholder='Brief description of the deck' onChange={ handleChange } 
-          value={description} required >
+          value={ description } required >
           </textarea>
         </label>
         <button type='button' className='CreateDeck-cancel-btn btn btn-secondary' 
@@ -101,7 +101,7 @@ function CreateDeck() {
         </button>
       </form>
     </div>
-    );
+  );
 }
 
 /* Exports the "CreateDeck" 'function/component' */
