@@ -10,13 +10,13 @@ An application that allows users to create, add, edit, and delete decks and card
 
 ## Technologies Used
   * **React:** Core programming language (React 18.2.0)
-  * **React Bootstrap:** Provides React components for Bootstrap
+  * **React Bootstrap:** Provides visual styling for the application
   * **CSS:** Provides visual styling for the application
   * **HTML:** Visually displays the content of the application
   * **Jest:** Unit testing framework
 
 ## Screenshot
-![Alt text](https://github.com/jlee55504/flashcard-o-matic-project/blob/main/src/imgs/Flashcard-o-matic%20project%20home%20screen%20image.png?raw=true "Flashcard-o-matic-project 'Layout/home' screen")
+![Alt text](https://github.com/jlee55504/flashcard-o-matic-project-qualified-version/blob/jl--flashcard-project-version-to-pass-cheggskills-test/src/imgs/Flashcard-o-matic%20project%20home%20screen%20image.png?raw=true "Flashcard-o-matic-project 'Layout/home' screen")
 
 ## Getting Started
 ### Prerequisites
