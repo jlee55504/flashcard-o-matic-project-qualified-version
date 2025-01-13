@@ -1,51 +1,64 @@
-Completed Chegg Skills "Flashcard-o-matic" "Qualified" project.
+# Flashcard-O-Matic Project
 
-I'm only going to be listing the 'files' I had to create/edit.
+An application that allows users to create, add, edit, and delete decks and cards in the decks used for studying.
 
-src/Layout/index.js
-The "Layout" 'function/component' diplays the "Header" 'component' and the 
-"Home.js", "Study.js", "CreateDeck.js", "Deck.js", "EditDeck.js", "AddCard.js", 
-and "EditCard.js" screens depending on the 'URL'. When the 'URL' is "/", the 
-"Home" page is displayed, which diplays a 'button' JSX 'element' with the 'text' 
-"Create Deck", all the "decks" on the local server along with the "view", "Study" 
-and a 'button' JSX 'element' to delete the specific "deck".
+## Features
+ - **Decks of cards management:** Create, update, and delete card decks.
+ - **Card management:** Create, edit, and delete the cards in the decks.
+ - **Study ability:** Memorize the answers to the questions on the cards to prepare for tests.
+ - **User-friendly Interface:** Simple structured layout for easy navigation.
 
-src/Layout/style.css
-CSS styling for all the 'files' to replicate Chegg Skill's example web page.
+## Technologies Used
+  * **React:** Core programming language (React 18.2.0)
+  * **React Bootstrap:** Provides React components for Bootstrap
+  * **CSS:** Provides visual styling for the application
+  * **HTML:** Visually displays the content of the application
+  * **Jest:** Unit testing framework
 
-src/decks/EditDeck.js
-The "EditDeck" 'function/component' displays the "nav-bar" 'div', (which 
-contains 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" (which 
-displays the specified "decks" info), and a 'form' allowing users to 'edit' and 
-'update' the info of the specified "deck" on the 'local server'.
+## Screenshot
+![Alt text](https://github.com/jlee55504/flashcard-o-matic-project/blob/main/src/imgs/Flashcard-o-matic%20project%20home%20screen%20image.png?raw=true "Flashcard-o-matic-project 'Layout/home' screen")
 
-src/decks/Deck.js
-The "Deck" 'function/component' displays the the "nav-bar" 'div' (which 
-    contains a 'link' to the "Home page" ('src/Layout/index.js')), the info for 
-    the specified "deck", 'button' JSX 'elements' to 'edit' ('EditDeck.js'), 
-    'study' ('Study.js'), 'add cards to the specified "deck"' ('AddCards.js'), the
-     info from every "card" in the specified "deck", and 'button' JSX 'elements' 
-     to 'edit' ('EditCard.js') or 'delete' the specified "card" from the specified "deck".
+## Getting Started
+### Prerequisites
+ - Node Package Manager (NPM)
 
- src/decks/CreateDeck.js
-The "CreateDeck" 'function/component' displays the "nav-bar" 'div' containing 
-a 'link' to the "Home page" ('src/Layout/index.js') and a 'form' allowing users 
-to 'create' a new "deck" and add it to the 'local server'.
+ ### Installation:
+  1. Clone the repository:
+     ```
+     https://github.com/jlee55504/flashcard-o-matic-render-version.git
+     ```
+  3. Navigate to the project directory:
+     ```
+     cd flashcard-o-matic-render-version
+     ```
+  5. Build the project:
+     ```
+     npm install
+     ```
+  6. Run the application:
+     ```
+     npm start
+     ```
 
-src/cards/Study.js
-The "Study" 'function/component' displays the "nav-bar" 'div' which (contains
- a 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" (which 
-  displays the specified "decks" info) and the data of the "front" and "back" 
-  'keys' of the specified "deck" 'object', with the ability to 'redisplay' the 
-  "cards" after all the "cards" have been displayed or to go back to the "Home 
-  page" ('src/Layout/index.js').
+## Usage
+Upon running the application, you'll be presented with the optons to:
+ 1. Create a new card deck
+ 2. View a deck of cards
+ 3. Study a deck of cards
+ 4. Delete a deck of cards
+ 
+Navigate through the options by clicking the corresponding buttons.
 
-  src/cards/EditCard.js
-  The "EditCard" 'function/component' displays the "nav-bar" 'div'. which 
-(contains a 'links' to the "Home page" ('src/Layout/index.js')) and "Deck.js" 
-(which displays the specified "decks" info) and a 'form' which allows users to 
-'edit' and update the 'text' of the specified "card" in the specified "deck".
+## Code Structure
+ - ``src/Layout/index.js:`` Main application entry point
+ - ``src/decks/CreateDeck.js:`` Creates new card decks
+ - ``src/decks/Deck.js:`` Allows a deck to be edited, studied, or deleted. New cards can also be added to the deck and current cards are displayed and can be edited or deleted
+ - ``src/decks/EditDeck.js:`` Allows the name and description of a deck to be edited
+ - ``src/cards/Study.js:`` Displays the front and back of every card in the deck to prepare for tests
+ - ``src/cards/AddCard.js:`` Allows new cards to be added to decks
+ - ``src/cards/EditCard.js:`` Allows the front and back of every card to be changed
+ - ``src/Layout/style.css:`` CSS styling for all the elements to replicate Chegg Skill's example web page
 
-src/cards/AddCard.js
-The "AddCard" 'function/component' allows users to add a "card" to the 
-specific "deck" and 'local server'.
+## Acknowledgments
+ - This project was built for the Chegg Skill's software engineering program
+ - This was my first project using React.js and was extremely helpful learning the power and ease of using React 
