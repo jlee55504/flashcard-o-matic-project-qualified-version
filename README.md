@@ -33,7 +33,7 @@ An application built without React Bootstrap that allows users to create, add, e
      ```
   2. Navigate to the project directory:
      ```
-     cd flashcard-o-matic-render-version
+     cd flashcard-o-matic-project-qualified-version
      ```
   3. Build the project:
      ```
