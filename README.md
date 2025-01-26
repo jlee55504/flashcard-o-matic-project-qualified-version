@@ -59,16 +59,16 @@ Navigate through the options by clicking the corresponding buttons.
 
 ## Code Structure
 
- - ``src/Layout/index.js:`` Main application entry point
- - ``src/decks/CreateDeck.js:`` Creates new card decks
- - ``src/decks/Deck.js:`` Allows a deck to be edited, studied, or deleted. New cards can also be added 
+  - ``src/Layout/index.js:`` Main application entry point
+  - ``src/decks/CreateDeck.js:`` Creates new card decks
+  - ``src/decks/Deck.js:`` Allows a deck to be edited, studied, or deleted. New cards can also be added 
  to the deck the current cards being displayed can be edited or deleted
- - ``src/decks/EditDeck.js:`` Allows the name and description of a deck to be edited
- - ``src/cards/Study.js:`` Displays the front and back of every card in the deck to prepare for tests
- - ``src/cards/AddCard.js:`` Allows new cards to be added to decks
- - ``src/cards/EditCard.js:`` Allows the front and back of every card to be edited
- - ``src/Layout/style.css:`` Handles the visual styling of the application
-
+  - ``src/decks/EditDeck.js:`` Allows the name and description of a deck to be edited
+  - ``src/cards/Study.js:`` Displays the front and back of every card in the deck to prepare for tests
+  - ``src/cards/AddCard.js:`` Allows new cards to be added to decks
+  - ``src/cards/EditCard.js:`` Allows the front and back of every card to be edited
+  - ``src/Layout/style.css:`` Handles the visual styling of the application
+  - ``src/imgs/:`` A folder containing the screenshot of the application
 ## Acknowledgments
 
  - This project was built for the Chegg Skill's software engineering program
