@@ -17,13 +17,15 @@ An application built without React Bootstrap that allows users to create, add, e
   * **Jest:** Unit testing framework
 
 ## Screenshot
+
 ![Alt text](https://github.com/jlee55504/flashcard-o-matic-project-qualified-version/blob/jl--flashcard-project-version-to-pass-cheggskills-test/src/imgs/Flashcard-o-matic%20project%20home%20screen%20image.png?raw=true "Flashcard-o-matic-project 'Layout/home' screen")
 
 
 ## Getting Started
 
 ### Prerequisites
- - Node Package Manager (NPM)
+
+  - Node Package Manager (NPM)
 
 ### Installation:
 
@@ -65,7 +67,7 @@ Navigate through the options by clicking the corresponding buttons.
  - ``src/cards/Study.js:`` Displays the front and back of every card in the deck to prepare for tests
  - ``src/cards/AddCard.js:`` Allows new cards to be added to decks
  - ``src/cards/EditCard.js:`` Allows the front and back of every card to be edited
- - ``src/Layout/style.css:`` Handles the visual styling for the application
+ - ``src/Layout/style.css:`` Handles the visual styling of the application
 
 ## Acknowledgments
 
