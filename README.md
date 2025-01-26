@@ -12,7 +12,7 @@ An application built without React Bootstrap that allows users to create, add, e
 ## Technologies Used
 
   * **React:** Core programming language (React 18.2.0)
-  * **CSS:** Provides visual styling for the application
+  * **CSS:** Provides visual styling of the application
   * **HTML:** Visually displays the content of the application
   * **Jest:** Unit testing framework
 
@@ -69,7 +69,7 @@ Navigate through the options by clicking the corresponding buttons.
   - ``src/cards/EditCard.js:`` Allows the front and back of every card to be edited
   - ``src/Layout/style.css:`` Handles the visual styling of the application
   - ``src/imgs/:`` A folder containing the screenshot of the application
-  
+
 ## Acknowledgments
 
  - This project was built for the Chegg Skill's software engineering program
