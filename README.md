@@ -69,6 +69,7 @@ Navigate through the options by clicking the corresponding buttons.
   - ``src/cards/EditCard.js:`` Allows the front and back of every card to be edited
   - ``src/Layout/style.css:`` Handles the visual styling of the application
   - ``src/imgs/:`` A folder containing the screenshot of the application
+  
 ## Acknowledgments
 
  - This project was built for the Chegg Skill's software engineering program
